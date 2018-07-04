@@ -20,6 +20,16 @@ Le Brikabrok est un addon utilitaire facilitant de nombreuses choses sur le serv
 
 **Le Brikabrok** accepte également la participation communautaire.
 
+**Contributeurs**
+
+* BinarySpace Aka Garly 
+* 1DIVIDU Aka Leuhn
+* Jaj Aka ?
+* Ranken Aka Le Professeur
+* Shaak Aka Shreya
+* Sycam0re Aka Seila 
+* Un rôdeur Aka Oscar 
+
 
 
 ---

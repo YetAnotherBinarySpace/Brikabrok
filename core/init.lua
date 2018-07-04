@@ -50,8 +50,8 @@ local acd = LibStub("AceConfigDialog-3.0")
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="0.1"
-Brikabrok.version = "Brikabrok~0.1"
+Brikabrok.versionmode ="1.0"
+Brikabrok.version = "Brikabrok~1.0"
 
 local defaults = {
   profile = {

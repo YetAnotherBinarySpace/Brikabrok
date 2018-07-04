@@ -70,7 +70,7 @@ end
 
 
 function Brikabrok.MinimapButton_Details(tt, ldb)
-  tt:SetText("Le Bricabroc")
+  tt:SetText("Le Brikabrok")
   tt:AddLine("Version : "..Brikabrok.versionmode.." Release",1,1,1)
   tt:AddLine("Clic gauche: Ouvrir le menu principal",1,1,1)
   tt:AddLine("Clic droit: Ouvrir le menu rapide",1,1,1)
