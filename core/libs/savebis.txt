@@ -1,0 +1,90 @@
+--[[
+
+        _______      ______   ______ _____ _______ _______ ______   ______  _____  _______
+ |      |______      |_____] |_____/   |   |       |_____| |_____] |_____/ |     | |      
+ |_____ |______      |_____] |    \_ __|__ |_____  |     | |_____] |    \_ |_____| |_____ 
+                                                                                          
+
+    MIT License
+
+    Copyright (c) 2018 BinarySpace
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+
+local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
+Brikabrok.updateNotify = Brikabrok:NewModule("updateNotify", "AceEvent-3.0","AceComm-3.0","AceBucket-3.0")
+Brikabrok.updateNotify.name = "Brikabrok"
+Brikabrok.updateNotify.channel = "xtensionxtooltip2"
+Brikabrok.updateNotify.versionmode ="0.14"
+Brikabrok.updateNotify.version = "Brikabrok~0.14"
+Brikabrok.updateNotify.channelname = GetChannelName(Brikabrok.updateNotify.channel)
+
+function Brikabrok:OnEnable()
+ 
+  --self:RegisterBucketEvent({"ADDON_LOADED"}, 1, "SendMessageChat")
+  --self:RegisterBucketEvent({"CHAT_MSG_CHANNEL"}, 1, "GetUpdateMessage")
+  self:RegisterEvent( "ADDON_LOADED" )
+  self:RegisterEvent( "CHAT_MSG_CHANNEL", "GetUpdateMessage" )
+end
+
+--[[
+**   SendMessageChat
+**   Send an update message on ADDON_LOADED
+--]]
+function Brikabrok:ADDON_LOADED()
+	for i=1,100 do
+		print("test")
+	end
+    --if Brikabrok.db.profile.update.data then
+	C_Timer.After(5, function () JoinChannelByName(Brikabrok.updateNotify.channelname) SendChatMessage(Brikabrok.updateNotify.version , "CHANNEL", nil, Brikabrok.updateNotify.channelname) end)
+    --end
+end
+
+
+--[[
+**   GetUpdateMessage
+**   Listen for update message and check version.
+**      message: Message received
+**      channel: Name of the channel where the message was received
+--]]
+function Brikabrok:GetUpdateMessage(event,message,author,language,channelname,target,afk,zoneid,channelnumber,channel)
+    --print("Message"..message.."Channel:"..channel)
+    if channel == Brikabrok.updateNotify.channel then
+        --print("channel pass")
+        local name,version = strsplit("~", message)
+            --print(version)
+            if not antispam and tonumber(version) and tonumber(version) > tonumber(Brikabrok.updateNotify.versionmode) and Brikabrok.db.profile.updateNotify.notification then
+                --print("version pass")
+                StaticPopupDialogs["BrikabrokUpdate"] = {
+                    text = "Veuillez mettre l'addon Brikabrok à jour.\nVersion: "..version,
+                    button1 = "Ok",
+                    OnAccept = function()
+                        antispam = true
+                        Brikabrok.sendMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version, "INFO")
+                    end,
+                    timeout = 0,
+                    whileDead = true
+                }
+                StaticPopup_Show("BrikabrokUpdate")
+            end
+        end
+end
+
+--]]

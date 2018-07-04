@@ -1,0 +1,11 @@
+
+## Interface: 70300
+#------------- Addon ----------------------------
+## Title: Le Brikabrok
+## Version: 0.1
+## Notes: Simple, Utile, Fonctionnel : What Else ?
+## SavedVariables: BrikabrokDB
+#------------- Author ----------------------------
+## Author: Binary Space
+#------------- Files -----------------------------
+Brikabrok.xml

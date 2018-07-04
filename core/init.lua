@@ -1,0 +1,291 @@
+﻿--[[
+
+        _______      ______   ______ _____ _______ _______ ______   ______  _____  _______
+ |      |______      |_____] |_____/   |   |       |_____| |_____] |_____/ |     | |      
+ |_____ |______      |_____] |    \_ __|__ |_____  |     | |_____] |    \_ |_____| |_____ 
+                                                                                          
+
+    MIT License
+
+    Copyright (c) 2018 BinarySpace
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+--]]
+
+
+-----------------------------------
+--------------- Libs --------------
+-----------------------------------
+
+Brikabrok = LibStub("AceAddon-3.0"):NewAddon("Brikabrok", "AceConsole-3.0", "AceHook-3.0", "AceEvent-3.0", "AceBucket-3.0","AceComm-3.0")
+local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
+local AceComm = LibStub("AceComm-3.0")
+local AceConfig = LibStub("AceConfig-3.0")
+local AceDB = LibStub("AceDB-3.0")
+local aboutPanel = LibStub("LibAboutPanel", true)
+local ac = LibStub("AceConfig-3.0")
+local acd = LibStub("AceConfigDialog-3.0")
+
+-----------------------------------
+----------- Variables -------------
+-----------------------------------
+
+Brikabrok.name = "Brikabrok"
+Brikabrok.channel = "xtensionxtooltip2"
+Brikabrok.channelname = GetChannelName(Brikabrok.channel)
+Brikabrok.versionmode ="0.1"
+Brikabrok.version = "Brikabrok~0.1"
+
+local defaults = {
+  profile = {
+        update = {
+            notification = true,
+            data = true,
+        },
+        transfer = {
+            data = true,
+        },
+  },
+}
+
+local function UpdateConfig()
+    return {
+        name = "Mise à jour",
+        type = "group",
+        order = 1,
+        args = {
+            update_notification = {
+                name = "Notifications",
+                desc = "Permet d'activer les notifications in-game des mises à jour.",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.update.notification = val end,
+                get = function() return Brikabrok.db.profile.update.notification end
+            },
+            update_transfer = {
+                name = "Envoi des mises à jour",
+                desc = "Permet de communiquer avec les autres joueurs votre version de l'addon.",
+                type = "toggle",
+                order = 2,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.update.data = val end,
+                get = function() return Brikabrok.db.profile.update.data  end
+            },
+        }
+    }
+end
+
+local function MacroConfig()
+    return {
+        name = "Données",
+        type = "group",
+        order = 1,
+        args = {
+            macro_transfer = {
+                name = "Transfert de données",
+                desc = "Permet aux joueurs de s'échanger des données en groupe.",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.transfer.data = val end,
+                get = function() return Brikabrok.db.profile.transfer.data end
+            },
+        }
+    }
+end
+
+
+-----------------------------------
+-------------- Main ---------------
+-----------------------------------
+
+function Brikabrok:OnInitialize()
+    -- Init DB
+    self.db = LibStub("AceDB-3.0"):New("BrikabrokDB", defaults, true)
+    self.profileOptions = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+    -- Init modules
+    self:EnableModule("libUI")
+    self:EnableModule("CONFIG")
+    self:EnableModule("UI")
+    self:EnableModule("SECONDARY")
+    self:EnableModule("MINIMAP")
+    self:EnableModule("MACRO")
+
+    -- nasty loop to create base for users and AVOID overwrite existing DB
+    if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+    -- spells
+    elseif self.db.profile.spells == nil and self.db.profile.gobs == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+    elseif self.db.profile.spells == nil and self.db.profile.anim  == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.anim = brikabrokAnimKit
+    elseif self.db.profile.spells == nil and not self.db.profile.gobs == nil and not self.db.profile.anim  == nil  then 
+        self.db.profile.spells = brikabrokSpells
+    -- gobs
+    elseif self.db.profile.gobs == nil and self.db.profile.anim  == nil then
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+     elseif self.db.profile.gobs == nil and not self.db.profile.spells == nil and not self.db.profile.anim  == nil  then
+        self.db.profile.gobs = brikabrokGobs
+    --  anim
+     elseif self.db.profile.anim  == nil and not self.db.profile.spells == nil and not self.db.profile.gobs  == nil  then
+        self.db.profile.anim = brikabrokAnimKit
+    end
+    -- Register Config
+    aboutPanel.new(nil, "Brikabrok")
+    -- Register Options UI
+    ac:RegisterOptionsTable("Brikabrok ".."Mises à jour", UpdateConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Mises à jour", "Mises à jour", "Brikabrok")
+    ac:RegisterOptionsTable("Brikabrok ".."Macros", MacroConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Macros", "Macros", "Brikabrok")
+    ac:RegisterOptionsTable("BrikabrokProfiles", self.profileOptions)
+    acd:AddToBlizOptions("BrikabrokProfiles", "Profils", "Brikabrok")
+    self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+    self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+    self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
+    -- Register events here
+    self:RegisterBucketEvent({"ADDON_LOADED"}, 1, "SendMessageChat")
+    self:RegisterEvent("CHAT_MSG_CHANNEL")
+    self:RegisterChatCommand("bkbdev", "ShowDevFrame")
+    Brikabrok.sendMessage("[Brikabrok] Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.","INFO")
+end
+
+function Brikabrok:OnEnable()
+    -- nasty loop to create base for users and AVOID overwrite existing DB
+    if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+    -- spells
+    elseif self.db.profile.spells == nil and self.db.profile.gobs == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+    elseif self.db.profile.spells == nil and self.db.profile.anim  == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.anim = brikabrokAnimKit
+    elseif self.db.profile.spells == nil and not self.db.profile.gobs == nil and not self.db.profile.anim  == nil  then 
+        self.db.profile.spells = brikabrokSpells
+    -- gobs
+    elseif self.db.profile.gobs == nil and self.db.profile.anim  == nil then
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+     elseif self.db.profile.gobs == nil and not self.db.profile.spells == nil and not self.db.profile.anim  == nil  then
+        self.db.profile.gobs = brikabrokGobs
+    --  anim
+     elseif self.db.profile.anim  == nil and not self.db.profile.spells == nil and not self.db.profile.gobs  == nil  then
+        self.db.profile.anim = brikabrokAnimKit
+    end
+    
+      StaticPopupDialogs["BrikabrokInstall"] = {
+      text = "[IMPORTANT] Voulez-vous recharger l'interface pour charger les données de base correctement ?",
+      button1 = "Oui",
+      button2 = "Non",
+      OnAccept = function()
+          ReloadUI()
+      end,
+      OnCancel = function()
+        Brikabrok.sendMessage("[Brikabrok] Les données de base n'ont pas été chargées et n'apparaîtront potentiellement qu'à la prochaine reconnection.")
+      end,
+      timeout = 0,
+      whileDead = true,
+      hideOnEscape = true,
+      preferredIndex = 3,
+    }
+    StaticPopup_Show("BrikabrokInstall")
+end
+
+function Brikabrok:RefreshConfig()
+    -- nasty loop to create base for users and AVOID overwrite existing DB
+    if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+    -- spells
+    elseif self.db.profile.spells == nil and self.db.profile.gobs == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.gobs = brikabrokGobs
+    elseif self.db.profile.spells == nil and self.db.profile.anim  == nil then
+        self.db.profile.spells = brikabrokSpells
+        self.db.profile.anim = brikabrokAnimKit
+    elseif self.db.profile.spells == nil and not self.db.profile.gobs == nil and not self.db.profile.anim  == nil  then 
+        self.db.profile.spells = brikabrokSpells
+    -- gobs
+    elseif self.db.profile.gobs == nil and self.db.profile.anim  == nil then
+        self.db.profile.gobs = brikabrokGobs
+        self.db.profile.anim = brikabrokAnimKit
+     elseif self.db.profile.gobs == nil and not self.db.profile.spells == nil and not self.db.profile.anim  == nil  then
+        self.db.profile.gobs = brikabrokGobs
+    --  anim
+     elseif self.db.profile.anim  == nil and not self.db.profile.spells == nil and not self.db.profile.gobs  == nil  then
+        self.db.profile.anim = brikabrokAnimKit
+    end
+      StaticPopupDialogs["BrikabrokReload"] = {
+      text = "Voulez-vous recharger l'interface pour changer de profil correctement?",
+      button1 = "Oui",
+      button2 = "Non",
+      OnAccept = function()
+          ReloadUI()
+      end,
+      OnCancel = function()
+        Brikabrok.sendMessage("[Brikabrok] Vous venez de changer de profil, mais vous n'avez pas rechargé votre interface, il peut arriver que vous ne voyez pas apparaître les spells/gobs/etc ... dans l'interface de l'addon.","WARNING")
+      end,
+      timeout = 0,
+      whileDead = true,
+      hideOnEscape = true,
+      preferredIndex = 3,
+    }
+    StaticPopup_Show("BrikabrokReload")
+end
+
+
+function Brikabrok:SendMessageChat()
+    if Brikabrok.db.profile.update.data then
+        C_Timer.After(5, function () JoinChannelByName(Brikabrok.channelname) SendChatMessage(Brikabrok.version , "CHANNEL", nil, Brikabrok.channelname) end)
+    end
+end
+
+
+function Brikabrok:CHAT_MSG_CHANNEL(event,message,author,language,channelname,target,afk,zoneid,channelnumber,channel)
+    if Brikabrok.db.profile.update.notification then
+        if channel == Brikabrok.channel then
+            local name,version = strsplit("~", message)
+                if not antispam and tonumber(version) and tonumber(version) > tonumber(Brikabrok.versionmode) then
+                    StaticPopupDialogs["BrikabrokUpdate"] = {
+                        text = "Veuillez mettre l'addon Brikabrok à jour.\nVersion: "..version,
+                        button1 = "Ok",
+                        OnAccept = function()
+                            antispam = true
+                            Brikabrok.sendMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version, "INFO")
+                        end,
+                        timeout = 0,
+                        whileDead = true
+                    }
+                    StaticPopup_Show("BrikabrokUpdate")
+                end
+        end
+    end
+end
+
+

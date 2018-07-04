@@ -1,0 +1,36 @@
+SIGN UP
+NEWSLETTER
+YOUR EMAIL ADRESS
+MORE
+0 COMMENT
+MESSAGE
+SUBJECT
+EMAIL ADRESS
+NAME
+404 page
+Page not found! The page you are looking for cannot be found.
+GO TO HOMEPAGE
+WEBSITE
+BECOME A SPONSOR
+SEARCH
+LATEST POSTS
+
+--[[
+	if string.find(text, ".",1,2) == nil or string.find(text, "/",1,2) == nil then
+		for i=1,#EMOTE_PATTERNS do
+			if BrikabrokDwarfAccent == true and not string.find(text, EMOTE_PATTERNS[i][2]) == nil and string.find(text, "|") == nil and text ~= "" then
+				print("No pattern matching for: ".." "..EMOTE_PATTERNS[i][1].." "..EMOTE_PATTERNS[i][2])
+				beginSplitEmote,endSplitEmote = string.find(text, EMOTE_PATTERNS[i][2])
+				local emote = string.sub(text, beginSplitEmote,endSplitEmote)
+				local message = string.sub(text, 1,beginSplitEmote-1)
+				local splitedMessage = string.gsub( message, "r", "'l");
+				text = splitedMessage.." "..emote
+			elseif BrikabrokDwarfAccent == true and string.find(text, EMOTE_PATTERNS[i][2]) == nil then
+				print("NOT DETECTED ANY EMOTE PATTERN")
+				text = string.gsub( text, "r", "'l");
+				text = string.gsub( text, "R", "'L");
+			end
+			
+		end
+	end
+--]]
