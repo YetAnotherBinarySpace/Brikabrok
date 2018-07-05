@@ -1,9 +1,9 @@
 --[[
 
-        _______      ______   ______ _____ _______ _______ ______   ______  _____  _______
- |      |______      |_____] |_____/   |   |       |_____| |_____] |_____/ |     | |      
- |_____ |______      |_____] |    \_ __|__ |_____  |     | |_____] |    \_ |_____| |_____ 
-                                                                                          
+        _______      ______   ______ _____ _     _ _______ ______   ______  _____  _     _
+ |      |______      |_____] |_____/   |   |____/  |_____| |_____] |_____/ |     | |____/ 
+ |_____ |______      |_____] |    \_ __|__ |    \_ |     | |_____] |    \_ |_____| |    \_
+
 
     MIT License
 
@@ -48,7 +48,7 @@ function Brikabrok.stringMatch(str,sid,sname,srank)
       return (tonumber(str)==sid or ("%s(%s)"):format(sname,srank):lower():find(str));
 end
 
--- Some functions from TRP3, thank's to Ellypse who wrote thoose functions.
+-- Some functions from TRP3, thank's to Ellypse who wrote those functions.
 
 function Brikabrok.pcall(func, ...)
   if func then

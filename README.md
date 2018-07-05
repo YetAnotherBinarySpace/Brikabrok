@@ -2,10 +2,10 @@
 ### Simple, fonctionnel, efficace : What Else ?
 
 ---
-Le Brikabrok est un addon utilitaire facilitant de nombreuses choses sur le serveur MJ-RP Kuretar écrit par BinarySpace : 
+Le Brikabrok est un addon utilitaire facilitant de nombreuses choses sur le serveur MJ-RP Kuretar développé par BinarySpace : 
 
 
-* Base de données spells / macros directement accessibles IN-GAME
+* Base de données spells / macros / aura / etc ... drectement accessibles IN-GAME
 * Base de données de GOB / Possibilitée de faire tourner ses gobs dans l'espace facilement
 * Base de données d'Animkit
 * Récupérer les informations de forge rapidement en copiant / collant.
