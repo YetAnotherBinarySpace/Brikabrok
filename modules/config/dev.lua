@@ -388,7 +388,7 @@ function Brikabrok:DrawGroupDev2(container)
         Brikabrok.sendMessage("[Brikabrok] Tout le contenu a été supprimé.")
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Action annulé")
+        Brikabrok.sendMessage("[Brikabrok] Action annulée")
       end,
       timeout = 0,
       whileDead = true,
@@ -614,7 +614,7 @@ function Brikabrok:DrawGroupDev3(container)
         Brikabrok.sendMessage("[Brikabrok] Tout le contenu a été supprimé.")
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Action annulé")
+        Brikabrok.sendMessage("[Brikabrok] Action annulée")
       end,
       timeout = 0,
       whileDead = true,
@@ -817,7 +817,7 @@ function Brikabrok:DrawGroupDev4(container)
 			local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.anim)
 			AceComm:SendCommMessage("BKBShareAnims", shortString, "PARTY", nil, "NORMAL")
 		end
-		Brikabrok.sendMessage("[Brikabrok] Données envoyé avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
+		Brikabrok.sendMessage("[Brikabrok] Données envoyées avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
     Brikabrok.sendMessage("[Brikabrok] Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
     else
 		Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner votre cible et être dans un groupe à deux!", "WARNING") 

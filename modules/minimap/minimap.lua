@@ -74,7 +74,7 @@ function Brikabrok.MinimapButton_Details(tt, ldb)
   tt:AddLine("Version : "..Brikabrok.versionmode.." Release",1,1,1)
   tt:AddLine("Clic gauche: Ouvrir le menu principal",1,1,1)
   tt:AddLine("Clic droit: Ouvrir le menu rapide",1,1,1)
-  tt:AddLine("Molette: Ouvrir le menu d'ajout",1,1,1)
+  tt:AddLine("Clic Molette: Ouvrir le menu d'ajout",1,1,1)
   tt:SetSize(270,90)
 end
 
