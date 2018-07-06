@@ -540,7 +540,14 @@ function Brikabrok:DrawGroupDev3(container)
   local ebButtonAnim = AceGUI:Create("Button")
   ebButtonAnim:SetText("Build")
   ebButtonAnim:SetWidth(200)
-  ebButtonAnim:SetCallback("OnClick", function() ebResultAnim:SetText('{"'..ebContentAnim:GetText()..'","'..ebNameAnim:GetText()..'","'..keyDev3Drop..'"}') table.insert(Brikabrok.db.profile.anim,{ebContentAnim:GetText(),ebNameAnim:GetText(),keyDev3Drop,bkbICONAnim:GetText()}) end)
+  ebButtonAnim:SetCallback("OnClick", function() 
+    if keyDev3Drop then
+      ebResultAnim:SetText('{"'..ebContentAnim:GetText()..'","'..ebNameAnim:GetText()..'","'..keyDev3Drop..'"}') 
+      table.insert(Brikabrok.db.profile.anim,{ebContentAnim:GetText(),ebNameAnim:GetText(),keyDev3Drop,bkbICONAnim:GetText()}) 
+    else
+      Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner le type des données.","WARNING")
+    end
+  end)
   brikabrokDevScroll:AddChild(ebButtonAnim)
 
   local DropdownAnims = {}
