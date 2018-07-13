@@ -25,11 +25,17 @@ S'il vous est toujours fastidieux de choisir vos gobs parmi une flopée d'ID inc
 
 Un grand merci à tous les contributeurs de ce projet qui a longuement traîné mais qui a enfin pu voir le jour !
 **1DIVIDU** Aka **Leuhn** pour les différentes idées de l'Addon ainsi que son support.
+
 **Jaj/Warli** Aka **Thasael** pour l'essai de l'addon quand celui-ci n'en n'était encore qu'à ses débuts
+
 **Ranken** Aka **Le Professeur** pour l'essai de l'addon quand celui-ci n'en n'était encore qu'à ses débuts
+
 **Shaak** Aka **Shreya** pour la vidéo de présentation, les idées, le soutien et la participation à la liste de spells, ayant fait des efforts tout le long de la création de l'addon (par contre pour sa participation nous n'avons pas de preuves)
+
 **Shezam** pour la somptueuse infographie du forum
+
 **Sycam0re** Aka **Seila** pour les différentes idées, le soutien moral et mental ainsi que la rédaction du post du Brikabrok
+
 **Un rôdeur** Aka **Oscar** pour l'essai de l'addon quand celui-ci n'en n'était encore qu'à ses débuts
 
 **Patch**, pour la liste des animkits à disposition sur le forum, celle-ci même dont nous nous sommes permis l'utilisation pour l'addon.
