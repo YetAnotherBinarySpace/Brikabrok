@@ -99,7 +99,7 @@ end
   sChooseRace:SetCallback("OnValueChanged", function(self,callback,key) keyOverrideDrop = key end)
   
   autoCheckRace = AceGUI:Create("CheckBox")
-  autoCheckRace:SetLabel("Race de base ?")
+  autoCheckRace:SetLabel("Race actuelle")
   autoCheckRace:SetValue(true)
   brikabrokEasyScroll:AddChild(autoCheckRace)
 

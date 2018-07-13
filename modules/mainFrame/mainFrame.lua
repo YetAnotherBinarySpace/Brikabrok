@@ -192,66 +192,87 @@ function Brikabrok:DrawGroup3(container)
 function findID (self,event,msg)
  if string.match (msg, "DisplayID du casque") then
   local info1 = string.sub(msg, 22,35)
-  editbox1:SetText(info1:gsub('%.', ''))
+  info1 = string.gsub(info1, "%s+", "")  -- Remove spaces
+  editbox1:SetText(info1:gsub('%.', '')) -- Remove points thank's to regex
  elseif string.match (msg, "DisplayID des épaulières") then
   local info2 = string.sub(msg, 29,35)
+  info2 = string.gsub(info2, "%s+", "") 
   editbox2:SetText(info2:gsub('%.', ''))
  elseif string.match (msg, "DisplayID de la chemise") then
   local info3 = string.sub(msg, 26,35)
+  info3 = string.gsub(info3, "%s+", "") 
   editbox3:SetText(info3:gsub('%.', ''))
  elseif string.match (msg, "DisplayID du torse") then
   local info4 = string.sub(msg, 21,35)
+  info4 = string.gsub(info4, "%s+", "") 
   editbox4:SetText(info4:gsub('%.', ''))
  elseif string.match (msg, "DisplayID de la ceinture") then
   local info5 = string.sub(msg, 27,35)
+  info5 = string.gsub(info5, "%s+", "") 
   editbox5:SetText(info5:gsub('%.', ''))
  elseif string.match (msg, "DisplayID des jambières") then
   local info6 = string.sub(msg, 27,35)
+  info6 = string.gsub(info6, "%s+", "") 
   editbox6:SetText(info6:gsub('%.', ''))
  elseif string.match (msg, "DisplayID des bottes") then
   local info7 = string.sub(msg, 23,35)
+  info7 = string.gsub(info7, "%s+", "") 
   editbox7:SetText(info7:gsub('%.', ''))
  elseif string.match (msg, "DisplayID des brassards") then
   local info8 = string.sub(msg, 26,35)
+  info8 = string.gsub(info8, "%s+", "") 
   editbox8:SetText(info8:gsub('%.', ''))
  elseif string.match (msg, "DisplayID des gants") then
   local info9 = string.sub(msg, 22,35)
+  info9 = string.gsub(info9, "%s+", "") 
   editbox9:SetText(info9:gsub('%.', ''))
  elseif string.match (msg, "DisplayID de la cape") then
   local info10 = string.sub(msg, 23,35)
+  info10 = string.gsub(info10, "%s+", "") 
   editbox10:SetText(info10:gsub('%.', ''))
  elseif string.match (msg, "DisplayID du tabard") then
   local info11 = string.sub(msg, 22,35)
+  info11 = string.gsub(info11, "%s+", "") 
   editbox11:SetText(info11:gsub('%.', ''))
  elseif string.match (msg, "ID de l'arme droite") then
   local info12 = string.sub(msg, 23,35)
+  info12 = string.gsub(info12, "%s+", "") 
   editbox12:SetText(info12:gsub('%.', ''))  
  elseif string.match (msg, "ID de l'arme gauche") then
   local info13 = string.sub(msg, 22,35)
+  info13 = string.gsub(info13, "%s+", "") 
   editbox13:SetText(info13:gsub('%.', ''))
  elseif string.match (msg, "Peau :") then
   local peauinfo = string.sub(msg, 7,10)
+  peauinfo = string.gsub(peauinfo, "%s+", "") 
   peauBox:SetText(peauinfo:gsub('%.', ''))
  elseif string.match (msg, "Visage :") then
    local visageinfo = string.sub(msg, 9,11)
-  visageBox:SetText(visageinfo:gsub('%.', ''))
+   visageinfo = string.gsub(visageinfo, "%s+", "") 
+   visageBox:SetText(visageinfo:gsub('%.', ''))
  elseif string.match (msg, "Cheveux :") then
    local cheveuxinfo = string.sub(msg, 10,12)
+   cheveuxinfo = string.gsub(cheveuxinfo, "%s+", "")
    cheveuxBox:SetText(cheveuxinfo:gsub('%.', ''))
  elseif string.match (msg, "Couleur :") then
    local couleurinfo = string.sub(msg, 10,12)
+   couleurinfo = string.gsub(couleurinfo, "%s+", "")
    couleurBox:SetText(couleurinfo:gsub('%.', ''))
  elseif string.match (msg, "Pilosite/Details :") then
    local detailsinfo = string.sub(msg, 19,21)
+   detailsinfo = string.gsub(detailsinfo, "%s+", "")
    detailsBox:SetText(detailsinfo:gsub('%.', ''))
  elseif string.match (msg, "Tatouage :") then
    local tatouageinfo = string.sub(msg, 11,13)
+   tatouageinfo = string.gsub(tatouageinfo, "%s+", "")
    tatouageBox:SetText(tatouageinfo:gsub('%.', ''))
  elseif string.match (msg, "Cornes :") then
    local cornesinfo = string.sub(msg, 9,11)
+   cornesinfo = string.gsub(cornesinfo, "%s+", "")
    cornesBox:SetText(cornesinfo:gsub('%.', ''))
  elseif string.match (msg, "Bandeau :") then
    local bandeauinfo = string.sub(msg, 10,15)
+   bandeauinfo = string.gsub(bandeauinfo, "%s+", "")
    bandeauBox:SetText(bandeauinfo:gsub('%.', ''))
   return false
  end

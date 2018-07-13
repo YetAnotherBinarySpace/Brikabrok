@@ -62,6 +62,9 @@ local defaults = {
         transfer = {
             data = true,
         },
+        dynamic_links = {
+            active = true,
+    }
   },
 }
 
@@ -112,6 +115,25 @@ local function MacroConfig()
     }
 end
 
+local function LinksConfig()
+    return {
+        name = "Liens dynamiques",
+        type = "group",
+        order = 1,
+        args = {
+            dynamic_links = {
+                name = "Liens ( Remplacement dynamique )",
+                desc = "Active des boutons cliquables dans le chat",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.dynamic_links.active = val end,
+                get = function() return Brikabrok.db.profile.dynamic_links.active end
+            },
+        }
+    }
+end
+
 
 -----------------------------------
 -------------- Main ---------------
@@ -128,6 +150,7 @@ function Brikabrok:OnInitialize()
     self:EnableModule("SECONDARY")
     self:EnableModule("MINIMAP")
     self:EnableModule("MACRO")
+    self:EnableModule("TRINITYLINKS")
 
     -- nasty loop to create base for users and AVOID overwrite existing DB
     if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
@@ -162,6 +185,8 @@ function Brikabrok:OnInitialize()
     acd:AddToBlizOptions("Brikabrok ".."Macros", "Macros", "Brikabrok")
     ac:RegisterOptionsTable("BrikabrokProfiles", self.profileOptions)
     acd:AddToBlizOptions("BrikabrokProfiles", "Profils", "Brikabrok")
+    ac:RegisterOptionsTable("Brikabrok ".."Liens",LinksConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Liens", "Liens", "Brikabrok")
     self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
@@ -169,7 +194,7 @@ function Brikabrok:OnInitialize()
     self:RegisterBucketEvent({"ADDON_LOADED"}, 1, "SendMessageChat")
     self:RegisterEvent("CHAT_MSG_CHANNEL")
     self:RegisterChatCommand("bkbdev", "ShowDevFrame")
-    Brikabrok.sendMessage("[Brikabrok] Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.","INFO")
+    C_Timer.After(5, function () Brikabrok.sendMessage("[Brikabrok] Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.","INFO") end)
 end
 
 function Brikabrok:OnEnable()
