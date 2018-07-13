@@ -61,7 +61,7 @@ end
 
 for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
 	if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
-		Brikabrok.sendMessage("[Brikabrok] Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez déactiver l'un des deux.","WARNING")
+		Brikabrok.sendMessage("[Brikabrok] Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING")
 	end
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.getLinks)
 end
