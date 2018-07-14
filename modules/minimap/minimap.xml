@@ -31,7 +31,7 @@
 
 -->
 
-	<Script file="minimap.lua"/>
+    <Script file="minimap.lua"/>
 
 <Button name="BrikabrokMinimapButton" parent="Minimap" enableMouse="true" movable="true" hidden="false">
         <Size>
@@ -78,7 +78,7 @@
         <HighlightTexture alphaMode="ADD" file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight"/>
         <Scripts>
             <OnLoad>
-                self:RegisterForClicks("LeftButtonUp","RightButtonUp")
+                self:RegisterForClicks("LeftButtonUp","RightButtonUp","MiddleButtonUp")
                 self:RegisterForDrag("LeftButton","RightButton")
             </OnLoad>
             <OnEnter>

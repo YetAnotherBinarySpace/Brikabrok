@@ -39,7 +39,7 @@ function BrikabrokTRINITYLINKS:OnEnable()
 -- Regex is meh, really
 local trinityLinks = {
 	{"(|cff%x%x%x%x%x%x|Hspell:(%d+)|h[^|]+|h|r)", "%1 |cffffff00|Hcommand:.learn %2|h[Apprendre]|h|r |cffffff00|Hcommand:.unlearn %2|h[Oublier]|h|r"},
-	{"(|cff%x%x%x%x%x%x|Hgameobject:%d+|h[^|]+|h|r GUID: (%d+)) (ID: (%d+))", "%1 |cffffffff|Hcommand:.gob activate %2|h[Activer]|h|r |cffffffff|Hcommand:.gob delete %2|h[Supprimer]|h|r %3 |cffffffff|Hcommand:.gob add %4|h[Spawn]|h|r"},
+	{"(|cff%x%x%x%x%x%x|Hgameobject:%d+|h[^|]+|h|r GUID: (%d+)) (ID: (%d+))", "%1 |cffffffff|Hcommand:.go object %2|h[Aller à]|h|r |cffffffff|Hcommand:.gob move %2|h[Déplacer]|h|r |cffffffff|Hcommand:.gob activate %2|h[Activer]|h|r |cffffffff|Hcommand:.gob delete %2|h[Supprimer]|h|r %3 |cffffffff|Hcommand:.gob add %4|h[Spawn]|h|r"},
 	{"(|cff%x%x%x%x%x%x|Hgameobject_entry:(%d+)|h[^|]+|h|r)", "%1 |cffffff00|Hcommand:.gob add %2|h[Spawn]|h|r"},
 	{"(|cff%x%x%x%x%x%x|Hcreature_entry:(%d+)|h[^|]+|h|r)", "%1 |cffffff00|Hcommand:.npc add %2|h[Spawn]|h|r"},
 	{"(|cff%x%x%x%x%x%x|Hfaction:(%d+)|h[^|]+|h|r)", "%1 |cffffff00|Hcommand:.mod rep %2 exalted|h[S'exalter]|h|r"},
@@ -61,7 +61,7 @@ end
 
 for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
 	if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
-		Brikabrok.sendMessage("[Brikabrok] Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING")
+		C_Timer.After(5.5, function () Brikabrok.sendMessage("[Brikabrok] Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
 	end
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.getLinks)
 end
