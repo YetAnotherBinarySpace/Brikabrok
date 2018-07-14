@@ -173,10 +173,9 @@ brikabrokGobs = {
 	{"Pain","546731","cFood"},
 	{"Brochette","549072","cFood"},
 	{"Plusieurs aliments","246433","cFood"},
-	{"Grand bouteille","192824","cFood"},
+	{"Grande bouteille","192824","cFood"},
 	{"Tonneau Bouteille","514572","cFood"},
 	-- Earth relateed objects / color : "cEarth"
 	{"-DE TERRE-", "0","cSmallObjectT","Interface\\Icons\\misc_arrowdown","categorie"},
 	{"Nagrand","501416","cEarth"},
-	{"Barque","36812","cEarth"}
 }

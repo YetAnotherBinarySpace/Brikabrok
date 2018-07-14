@@ -58,9 +58,6 @@ starterPack = {
 
 
 brikabrokSpells = {
-	{"Interface\\Icons\\misc_arrowdown", "-Starter Pack-","cTitle","0", "title","categorie"},
-	{"Interface\\Icons\\Ability_Mage_FireStarter", "Starter Pack : Pyromancien","cFire","starterPackfire","starterPack"},
-	{"Interface\\Icons\\INV_Inscription_Frog", "Starter Pack : Pepe","cFire","starterPackpepe","starterPack"},
 	{"Interface\\Icons\\misc_arrowdown", "-Sacré-","cTitle","0", "title","categorie"},
 	{"Interface\\Icons\\spell_holy_surgeoflight", "Canalisation","cHoly",".debug anim 469 \n .aura 34228","special"},
 	{"Interface\\Icons\\spell_holy_surgeoflight", "Imprégnation arme","cHoly",".cast 236813 \n .aura 123276","special"},
@@ -87,12 +84,6 @@ brikabrokSpells = {
 	{"Interface\\Icons\\inv_elemental_primal_shadow", "Tempête d’ombre","cShadow","87990"},
 	{"Interface\\Icons\\spell_shadow_summonvoidwalker", "Aura ténébreuse","cShadow","73304"},
 	{"Interface\\Icons\\spell_shadow_summonvoidwalker", "Aura ténébreuse - Grande","cShadow","73305"},
-	{"Interface\\Icons\\misc_arrowdown", "-FEU-","cTitle","0", "title","categorie"},
-	{"Interface\\Icons\\spell_fire_firebolt02", "Boule de feu","cFire","61648", "cast"},
-	{"Interface\\Icons\\inv_jewelry_ring_65", "Anneau de feu","cFire","61648", "cast"},
-	{"Interface\\Icons\\spell_fire_sealoffire", "Nova explosivesqsdlqskldsqklmdsq","cFire","61648"},
-	{"Interface\\Icons\\spell_shadow_rainoffire", "Pluie de feu","cFire","61648"},
-	{"Interface\\Icons\\spell_holy_innerfire", "Gerbe de flammes","cFire","61648"},
 	{"Interface\\Icons\\misc_arrowdown", "-Eau-","cTitle","0", "title","categorie"},
 	{"Interface\\Icons\\trade_engineering", "Effet de marche sous l'eau","cWater","73305"},
 	{"Interface\\Icons\\inv_potion_17", "Respiration aquatique","cWater","7178"},
@@ -101,7 +92,6 @@ brikabrokSpells = {
 	{"Interface\\Icons\\spell_shaman_tidalwaves", "Déferlante","cWater","57652"},
 	{"Interface\\Icons\\inv_spear_04", "Bénédiction des Courcinglants","cWater","67591"},
 	{"Interface\\Icons\\misc_arrowdown", "-Froid-","cTitle","0", "title","categorie"},
-	{"Interface\\Icons\\spell_frost_frostnova", "Nova de givre","cFrost","61648"},
 	{"Interface\\Icons\\spell_frost_icestorm", "Blizzard","cFrost","58693"},
 	{"Interface\\Icons\\spell_frost_manarecharge", "Canalisation du givre","cFrost","75427"},
 	{"Interface\\Icons\\spell_fire_fire", "Canalisation (tourbillon)","cFrost","45846"},

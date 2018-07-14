@@ -165,7 +165,7 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
               CreateMacro(sName, "INV_MISC_QUESTIONMARK", sID, 1);
               Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
             elseif sMacro == "casttr" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".castr".." "..sID, 1);
+              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID.." ".."tr", 1);
               Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
             elseif sMacro == "spellviskit" then 
               CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".spellviskit".." "..sID, 1);

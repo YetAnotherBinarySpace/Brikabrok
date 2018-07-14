@@ -63,7 +63,7 @@ local defaults = {
             data = true,
         },
         dynamic_links = {
-            active = true,
+            active = false,
     }
   },
 }
