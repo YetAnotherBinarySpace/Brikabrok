@@ -50,8 +50,8 @@ local acd = LibStub("AceConfigDialog-3.0")
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.0"
-Brikabrok.version = "Brikabrok~1.0"
+Brikabrok.versionmode ="1.02"
+Brikabrok.version = "Brikabrok~1.02"
 
 local defaults = {
   profile = {
@@ -62,9 +62,12 @@ local defaults = {
         transfer = {
             data = true,
         },
+        macro = {
+            storage = "Character",
+        },
         dynamic_links = {
             active = false,
-    }
+        }
   },
 }
 
@@ -96,6 +99,11 @@ local function UpdateConfig()
     }
 end
 
+local macroStorage = {
+    ["Account"] = "Compte",
+    ["Character"] = "Personnage"
+}
+
 local function MacroConfig()
     return {
         name = "Données",
@@ -109,7 +117,16 @@ local function MacroConfig()
                 order = 1,
                 width = "full",
                 set = function(info,val) Brikabrok.db.profile.transfer.data = val end,
-                get = function() return Brikabrok.db.profile.transfer.data end
+                get = function() return Brikabrok.db.profile.transfer.data end,
+            },
+            macro_storage = {
+                name = "Sauvegarde des macros",
+                desc = "Choississez où seront sauvegardées vos macros ( compte ou personnage )",
+                type = "select",
+                order = 2,
+                values = macroStorage,
+                set = function(info,val) Brikabrok.db.profile.macro.storage = val end,
+                get = function() return Brikabrok.db.profile.macro.storage end
             },
         }
     }
@@ -194,7 +211,13 @@ function Brikabrok:OnInitialize()
     self:RegisterBucketEvent({"ADDON_LOADED"}, 1, "SendMessageChat")
     self:RegisterEvent("CHAT_MSG_CHANNEL")
     self:RegisterChatCommand("bkbdev", "ShowDevFrame")
-    C_Timer.After(5, function () Brikabrok.sendMessage("[Brikabrok] Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.","INFO") end)
+    self:RegisterChatCommand("bkbconvert","ConvertID")
+    self:RegisterChatCommand("brikabrok","ShowHelp")
+    self:RegisterChatCommand("bkb","ShowHelp")
+    C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
+    if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
+        C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
+    end
 end
 
 function Brikabrok:OnEnable()
@@ -231,7 +254,7 @@ function Brikabrok:OnEnable()
           ReloadUI()
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Les données de base n'ont pas été chargées et n'apparaîtront potentiellement qu'à la prochaine reconnection.")
+        Brikabrok.formatMessage("Les données de base n'ont pas été chargées et n'apparaîtront potentiellement qu'à la prochaine reconnection.")
       end,
       timeout = 0,
       whileDead = true,
@@ -274,7 +297,7 @@ function Brikabrok:RefreshConfig()
           ReloadUI()
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Vous venez de changer de profil, mais vous n'avez pas rechargé votre interface, il peut arriver que vous ne voyez pas apparaître les spells/gobs/etc ... dans l'interface de l'addon.","WARNING")
+        Brikabrok.formatMessage("Vous venez de changer de profil, mais vous n'avez pas rechargé votre interface, il peut arriver que vous ne voyez pas apparaître les spells/gobs/etc ... dans l'interface de l'addon.","WARNING")
       end,
       timeout = 0,
       whileDead = true,
@@ -302,7 +325,7 @@ function Brikabrok:CHAT_MSG_CHANNEL(event,message,author,language,channelname,ta
                         button1 = "Ok",
                         OnAccept = function()
                             antispam = true
-                            Brikabrok.sendMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version, "INFO")
+                            Brikabrok.formatMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version, "INFO")
                         end,
                         timeout = 0,
                         whileDead = true

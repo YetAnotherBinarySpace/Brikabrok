@@ -51,6 +51,8 @@
 **		ce qui donne Destruction~.cast 5825
 --]]
 
+
+-- Test Data
 starterPack = {
 	{"starterPackfire",85256,8562,52652,"Lol~25205","Risitas~issou"},
 	{"starterPackpepe",3630,8562,52652,"Lol~25205","Risitas~issou"},

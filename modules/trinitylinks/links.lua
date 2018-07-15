@@ -60,9 +60,6 @@ function Brikabrok.getLinks(self, event, message, ...)
 end
 
 for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
-	if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
-		C_Timer.After(5.5, function () Brikabrok.sendMessage("[Brikabrok] Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
-	end
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.getLinks)
 end
 

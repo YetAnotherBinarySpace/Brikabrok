@@ -89,6 +89,34 @@ function Brikabrok:addToScroll(widget)
 end
 
 --[[
+**   CreateMacro
+**   Wrapper to let the user choose where they want to store the macro
+**      name: Name of the macro
+**      icon: Path of the icon
+**      content: Content of the macro
+--]]
+function Brikabrok:CreateMacro(name,icon,content)
+  local numglobal,numperchar = GetNumMacros()
+  if Brikabrok.db.profile.macro.storage == "Account" then
+    if numglobal < 120 then
+      CreateMacro(name, icon, content)
+      Brikabrok.formatMessage("Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+    else
+      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'empalacement de sauvegarde dans les options.","DANGER")
+    end
+  elseif Brikabrok.db.profile.macro.storage == "Character" then
+    if numperchar < 18 then
+      CreateMacro(name, icon, content,1)
+      Brikabrok.formatMessage("Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+    else
+      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'empalacement de sauvegarde dans les options.","DANGER")
+    end
+  else
+    Brikabrok.formatMessage("Le type de stockage défini est invalide, veuillez aller le redéfinir dans les options","DANGER")
+  end
+end
+
+--[[
 **   showTooltip
 **   Help Tooltip that shows some informations
 **     tt: Which tooltip
@@ -110,13 +138,13 @@ function Brikabrok:showTooltip(tt, ldb, frame)
     tt:AddLine("Clic gauche : Jouer une animation",1,1,1)
     tt:AddLine("Molette : Enlever l'animation",1,1,1)
     tt:AddLine("Clic droit : Créer une macro pour l'anim",1,1,1)
-    tt:SetSize(258,80)
+    tt:SetSize(275,80)
    elseif frame=="macros" then
     tt:SetText("Aide")
     tt:AddLine("Clic gauche : Envoyer une macro à votre cible",1,1,1)
     tt:AddLine("La cible doit être dans votre groupe (à 2 max)",1,1,1)
     tt:AddLine("L'addon n'est pas responsable de vos actions",1,1,1)
-    tt:SetSize(302,80)   
+    tt:SetSize(305,80)   
   end
 end
 
@@ -156,41 +184,35 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
             buttonMod = GetMouseButtonClicked()
             if buttonMod == "LeftButton" then
             if sMacro == "cast" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID, 1);
-              Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID);
             elseif sMacro == "aura" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".aura".." "..sID, 1);
-              Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
-            elseif sMacro == "special" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", sID, 1);
-              Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".aura".." "..sID);
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", sID);
             elseif sMacro == "casttr" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID.." ".."tr", 1);
-              Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID.." ".."tr");
             elseif sMacro == "spellviskit" then 
-              CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".spellviskit".." "..sID, 1);
-              Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".spellviskit".." "..sID);
             elseif sMacro == "spell" then 
               SendChatMessage(".learn "..sID, "SAY")
             elseif sMacro == "starterpack" then
               -- Handle multiple things
               Brikabrok:StarterPack(sID,sName)
-              Brikabrok.sendMessage("[Brikabrok] Vous venez d'utiliser un Starter Pack ! Vous pouvez les macros mettre dans votre barre d'action.", "SUCCESS")
+              Brikabrok.formatMessage("Vous venez d'utiliser un Starter Pack ! Vous pouvez les macros mettre dans votre barre d'action.", "SUCCESS")
             elseif sID == "0" then
-              Brikabrok.sendMessage("[Brikabrok] Pfah ... ! Pas possible d'apprendre une catégorie en tant que sort, désolé", "WARNING")
+              Brikabrok.formatMessage("Pfah ... ! Pas possible d'apprendre une catégorie en tant que sort, désolé", "WARNING")
             else
               SendChatMessage(".learn "..sID, "SAY")
             end
             elseif buttonMod == "RightButton" then
               if sMacro == nil then
-                Brikabrok.sendMessage("[Brikabrok] Vous ne connaissez plus ce sort.", "WARNING")
+                Brikabrok.formatMessage("Vous ne connaissez plus ce sort.", "WARNING")
                 SendChatMessage(".unlearn "..sID, "SAY")
               elseif sMacro == "starterpack" then
                 Brikabrok:RemoveStarterPack(sID,sName)
-                Brikabrok.sendMessage("[Brikabrok] Tout le contenu du starter pack a été supprimé.", "SUCCESS")
+                Brikabrok.formatMessage("Tout le contenu du starter pack a été supprimé.", "SUCCESS")
               elseif sMacro == "cast" or "special" then
                 DeleteMacro(sName)
-                Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être supprimée.", "SUCCESS")
+                Brikabrok.formatMessage("Une macro vient d'être supprimée.", "SUCCESS")
               end
             end
       end,
@@ -214,7 +236,7 @@ function Brikabrok:StarterPack(sID,sName)
           SendChatMessage(".learn "..modlearn, "SAY")
         elseif type(modlearn) == "string" and modlearn ~= nil then
           local oName,oContent = strsplit("~", modlearn)
-          CreateMacro(oName, "INV_MISC_QUESTIONMARK", oContent, 1);  
+          Brikabrok:CreateMacro(oName, "INV_MISC_QUESTIONMARK", oContent);  
         end
       end
     end
@@ -270,13 +292,13 @@ function Brikabrok:CreateLabelGobs(text, icon, sID, callbacks)
         buttonMod = GetMouseButtonClicked()
         if buttonMod == "LeftButton" then
           if sID=="0" then
-            Brikabrok.sendMessage("[Brikabrok] Mhhh ... ? C'est pas spawnable, désolé", "WARNING")
+            Brikabrok.formatMessage("Mhhh ... ? C'est pas spawnable, désolé", "WARNING")
           else  
             SendChatMessage(".gob add "..sID, "GUILD")
           end
         elseif buttonMod == "RightButton" then
             --Brikabrok.ShowPreview(nil)
-            Brikabrok.sendMessage("[Brikabrok] Fonctionnalité en cours de développement, désolé.", "INFO")
+            Brikabrok.formatMessage("Fonctionnalité en cours de développement, désolé.", "INFO")
         end
       end,
             OnEnter = function (container, event, group) GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR") Brikabrok:showTooltip(GameTooltip, nil, "gobs")  end ,
@@ -327,8 +349,7 @@ function Brikabrok:CreateLabelAnimations(text, icon, sID, callbacks)
           SendChatMessage(".animkit 0","GUILD")
         elseif buttonMod == "RightButton" then
             --Brikabrok.ShowPreview(nil)
-            CreateMacro(text, "INV_MISC_QUESTIONMARK", ".animkit ".." "..sID, 1);
-            Brikabrok.sendMessage("[Brikabrok] Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
+            Brikabrok:CreateMacro(text, "INV_MISC_QUESTIONMARK", ".animkit ".." "..sID);
         end
       end,
             OnEnter = function (container, event, group) GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR") Brikabrok:showTooltip(GameTooltip, nil, "animations")  end ,
@@ -377,9 +398,9 @@ function Brikabrok:CreateLabelMacros(text, icon, body, callbacks)
           local shortString = text.."~"..icon.."~"..body.."~"..playerName
           if UnitInParty("target") then
             AceComm:SendCommMessage("BKBSend", shortString, "PARTY", nil, "NORMAL") 
-            Brikabrok.sendMessage("[Brikabrok] Macro envoyé avec succès, en attente d'une réponse ... :", "SUCCESS") 
+            Brikabrok.formatMessage("Macro envoyé avec succès, en attente d'une réponse ... :", "SUCCESS") 
           else 
-            Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner votre cible et être dans un groupe !", "WARNING") 
+            Brikabrok.formatMessage("Veuillez sélectionner votre cible et être dans un groupe !", "WARNING") 
           end
         end
       end,

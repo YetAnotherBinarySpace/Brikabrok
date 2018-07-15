@@ -24,6 +24,7 @@ S'il vous est toujours fastidieux de choisir vos gobs parmi une flopée d'ID inc
 **Contributeurs**
 
 Un grand merci à tous les contributeurs de ce projet qui a longuement traîné mais qui a enfin pu voir le jour !
+
 **1DIVIDU** Aka **Leuhn** pour les différentes idées de l'Addon ainsi que son support.
 
 **Jaj/Warli** Aka **Thasael** pour l'essai de l'addon quand celui-ci n'en n'était encore qu'à ses débuts

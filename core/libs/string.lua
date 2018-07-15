@@ -79,19 +79,6 @@ function Brikabrok:CloneTable(orig)
     return copy
 end
 
-function Brikabrok.setColor(color)
-  local color = color or "w"; -- default color if bad argument
-  if color == "r" then return "|cffff0000" end -- red
-  if color == "g" then return "|cff00ff00" end -- green
-  if color == "b" then return "|cff0000ff" end -- blue
-  if color == "y" then return "|cffffff00" end -- yellow
-  if color == "p" then return "|cffff00ff" end -- purple
-  if color == "c" then return "|cff00ffff" end -- cyan
-  if color == "w" then return "|cffffffff" end -- white
-  if color == "0" then return "|cff000000" end -- black
-  if color == "o" then return "|cffffaa00" end -- orange
-end
-
 function Brikabrok:SerializeTable(structure)
     local nStructure = libSerializer:Serialize(structure)
     return nStructure
@@ -100,7 +87,7 @@ end
 function Brikabrok:safeDeserialize(structure, default)
     local status, data = libSerializer:Deserialize(structure);
     if not status then
-        Brikabrok.sendMessage("Deserialization error:\n" .. tostring(structure) .. "\n" .. tostring(data), "WARNING");
+        Brikabrok.formatMessage("Deserialization error:\n" .. tostring(structure) .. "\n" .. tostring(data), "WARNING");
         return default;
     end
     return data;

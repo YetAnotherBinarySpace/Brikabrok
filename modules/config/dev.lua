@@ -117,12 +117,12 @@ function Brikabrok:DrawGroupDev1(container)
       ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'","categorie"} \n') 
       table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop,"categorie"}) 
 	elseif cbCategorie:GetValue() == true and not keyDevDrop then 
-		Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner le type des données.","WARNING")
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     elseif cbCategorie:GetValue() == false and keyDevDrop then 
       ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'"} \n') 
       table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop}) 
 	elseif cbCategorie:GetValue() == false and not keyDevDrop then 
-		Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner le type des données.","WARNING")
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     end
     end)
   brikabrokDevScroll:AddChild(ebButton)
@@ -191,10 +191,10 @@ function Brikabrok:DrawGroupDev1(container)
         wipe(Brikabrok.db.profile.spells)
         refreshTable()
         ebDelete:SetList(DropdownSpells)
-        Brikabrok.sendMessage("[Brikabrok] Tout le contenu a été supprimé.")
+        Brikabrok.formatMessage("Tout le contenu a été supprimé.")
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Action annulée")
+        Brikabrok.formatMessage("Action annulée")
       end,
       timeout = 0,
       whileDead = true,
@@ -319,7 +319,7 @@ function Brikabrok:DrawGroupDev2(container)
 		ebResultGob:SetText('{"'..ebNameGob:GetText()..'","'..ebContentGob:GetText()..'","'..'nil","'..bkbICONGob:GetText()..'","'..keyDev2Drop..'"} \n') 
 		table.insert(Brikabrok.db.profile.gobs,{ebNameGob:GetText(),ebContentGob:GetText(),nil,bkbICONGob:GetText(),keyDev2Drop})
 	elseif not keyDev2Drop then
-		Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner le type des données.","WARNING")
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
 	end
 	end)
   brikabrokDevScroll:AddChild(ebButtonGob)
@@ -385,10 +385,10 @@ function Brikabrok:DrawGroupDev2(container)
         wipe(Brikabrok.db.profile.gobs)
         refreshTableGobs() 
         ebDeleteGob:SetList(DropdownGobs)
-        Brikabrok.sendMessage("[Brikabrok] Tout le contenu a été supprimé.")
+        Brikabrok.formatMessage("Tout le contenu a été supprimé.")
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Action annulée")
+        Brikabrok.formatMessage("Action annulée")
       end,
       timeout = 0,
       whileDead = true,
@@ -545,7 +545,7 @@ function Brikabrok:DrawGroupDev3(container)
       ebResultAnim:SetText('{"'..ebContentAnim:GetText()..'","'..ebNameAnim:GetText()..'","'..keyDev3Drop..'"}') 
       table.insert(Brikabrok.db.profile.anim,{ebContentAnim:GetText(),ebNameAnim:GetText(),keyDev3Drop,bkbICONAnim:GetText()}) 
     else
-      Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner le type des données.","WARNING")
+      Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     end
   end)
   brikabrokDevScroll:AddChild(ebButtonAnim)
@@ -611,10 +611,10 @@ function Brikabrok:DrawGroupDev3(container)
         wipe(Brikabrok.db.profile.anim)
         refreshTableAnims() 
         ebDeleteAnim:SetList(DropdownAnims) 
-        Brikabrok.sendMessage("[Brikabrok] Tout le contenu a été supprimé.")
+        Brikabrok.formatMessage("Tout le contenu a été supprimé.")
       end,
       OnCancel = function()
-        Brikabrok.sendMessage("[Brikabrok] Action annulée")
+        Brikabrok.formatMessage("Action annulée")
       end,
       timeout = 0,
       whileDead = true,
@@ -712,17 +712,17 @@ function Brikabrok:DrawGroupDev4(container)
     if keyDev23Drop == "spells" then
       local serializedExport = Brikabrok:SerializeTable(Brikabrok.db.profile.spells)
       ebExportR:SetText(serializedExport) 
-      Brikabrok.sendMessage("[Brikabrok] Exportation des données réussis") 
+      Brikabrok.formatMessage("Exportation des données réussis") 
     elseif keyDev23Drop == "gobs" then
       local serializedExport = Brikabrok:SerializeTable(Brikabrok.db.profile.gobs)
       ebExportR:SetText(serializedExport) 
-      Brikabrok.sendMessage("[Brikabrok] Exportation des données réussis") 
+      Brikabrok.formatMessage("Exportation des données réussis") 
     elseif  keyDev23Drop == "anims" then
       local serializedExport = Brikabrok:SerializeTable(Brikabrok.db.profile.anim)
       ebExportR:SetText(serializedExport) 
-      Brikabrok.sendMessage("[Brikabrok] Exportation des données réussis") 
+      Brikabrok.formatMessage("Exportation des données réussis") 
     else 
-      Brikabrok.sendMessage("[Brikabrok] Données non valides", "WARNING")
+      Brikabrok.formatMessage("Données non valides", "WARNING")
     end
     end)
   brikabrokDevScroll:AddChild(bExport)
@@ -758,21 +758,20 @@ function Brikabrok:DrawGroupDev4(container)
     local code = ebImportR:GetText()
     local object = Brikabrok:safeDeserialize(code)
     if object and type(object) == "table" then
-        print(keyDev4Drop)
         if keyDev4Drop == "spells" then
             Brikabrok.db.profile.spells = object
-             Brikabrok.sendMessage("[Brikabrok] Importation des spells réussis")
+             Brikabrok.formatMessage("Importation des spells réussis")
         elseif keyDev4Drop == "gobs" then
             Brikabrok.db.profile.gobs = object
-             Brikabrok.sendMessage("[Brikabrok] Importation des gobs réussis")
+            Brikabrok.formatMessage("Importation des gobs réussis")
         elseif keyDev4Drop == "anims" then 
             Brikabrok.db.profile.anim = object
-            Brikabrok.sendMessage("[Brikabrok] Importation des animations réussis")
+            Brikabrok.formatMessage("Importation des animations réussis")
         else
-            Brikabrok.sendMessage("[Brikabrok] Type de données non reconnues")
+            Brikabrok.formatMessage("Type de données non reconnues")
         end
     else
-        Brikabrok.sendMessage("[Brikabrok] Échec de l'importation, veuillez vérifier l'intégrité des données.")
+        Brikabrok.formatMessage("Échec de l'importation, veuillez vérifier l'intégrité des données.")
     end
   end)
   brikabrokDevScroll:AddChild(ebImport)
@@ -817,10 +816,10 @@ function Brikabrok:DrawGroupDev4(container)
 			local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.anim)
 			AceComm:SendCommMessage("BKBShareAnims", shortString, "PARTY", nil, "NORMAL")
 		end
-		Brikabrok.sendMessage("[Brikabrok] Données envoyées avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
-    Brikabrok.sendMessage("[Brikabrok] Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
+		Brikabrok.formatMessage("Données envoyées avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
+    Brikabrok.formatMessage("Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
     else
-		Brikabrok.sendMessage("[Brikabrok] Veuillez sélectionner votre cible et être dans un groupe à deux!", "WARNING") 
+		Brikabrok.formatMessage("Veuillez sélectionner votre cible et être dans un groupe à deux!", "WARNING") 
 	end
   end)
   brikabrokDevScroll:AddChild(ebShare)
@@ -866,21 +865,21 @@ function Brikabrok:DrawGroupDev4(container)
       local dataProfile = Brikabrok.db.profile.spells
       Brikabrok.db:SetProfile(currentProfile)
       Brikabrok.db.profile.spells = dataProfile
-      Brikabrok.sendMessage("[Brikabrok] Données importées avec succès du profil !", "SUCCESS")
+      Brikabrok.formatMessage("Données importées avec succès du profil !", "SUCCESS")
     elseif keyDev32Drop == "gobs" then
       local currentProfile = Brikabrok.db:GetCurrentProfile()
       Brikabrok.db:SetProfile(keyDev32Drop)
       local dataProfile = Brikabrok.db.profile.gobs
       Brikabrok.db:SetProfile(currentProfile)
       Brikabrok.db.profile.spells = dataProfile
-      Brikabrok.sendMessage("[Brikabrok] Données importées avec succès du profil !", "SUCCESS")
+      Brikabrok.formatMessage("Données importées avec succès du profil !", "SUCCESS")
     elseif keyDev32Drop == "anims" then 
       local currentProfile = Brikabrok.db:GetCurrentProfile()
       Brikabrok.db:SetProfile(keyDev32Drop)
       local dataProfile = Brikabrok.db.profile.anim
       Brikabrok.db:SetProfile(currentProfile)
       Brikabrok.db.profile.spells = dataProfile
-      Brikabrok.sendMessage("[Brikabrok] Données importées avec succès du profil !", "SUCCESS")
+      Brikabrok.formatMessage("Données importées avec succès du profil !", "SUCCESS")
     end
   end)
   brikabrokDevScroll:AddChild(bImportProfile)

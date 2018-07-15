@@ -57,7 +57,7 @@ function Brikabrok:OnCommReceived(prefix, message, distribution, sender)
     		  button1 = "Oui",
     		  button2 = "Non",
     		  OnAccept = function()
-    		          CreateMacro(text, icon, body)
+    		          Brikabrok:CreateMacro(text, icon, body)
                 	  AceComm:SendCommMessage("BKBAccepted","", "PARTY", nil, "NORMAL")
     		  end,
     		  OnCancel = function ()
@@ -68,19 +68,19 @@ function Brikabrok:OnCommReceived(prefix, message, distribution, sender)
     		  showAlert = true,
     		}
         else
-            Brikabrok.sendMessage("[Brikabrok] La personne qui a essayé de vous envoyer une macro n'est pas dans votre groupe.", "DANGER")
+            Brikabrok.formatMessage("La personne qui a essayé de vous envoyer une macro n'est pas dans votre groupe.", "DANGER")
         end
         StaticPopup_Show("BrikabrokMacroReceive")
 	elseif prefix == "BKBAccepted" then
-		Brikabrok.sendMessage("[Brikabrok] La personne à la quelle vous avez essayé d'envoyer les données a acceptée.","SUCCESS")
+		Brikabrok.formatMessage("La personne à la quelle vous avez essayé d'envoyer les données a acceptée.","SUCCESS")
 	elseif prefix == "BKBRefused" then
-		Brikabrok.sendMessage("[Brikabrok] La personne à la quelle vous avez essayé d'envoyer les données a refusée.", "WARNING")
+		Brikabrok.formatMessage("La personne à la quelle vous avez essayé d'envoyer les données a refusée.", "WARNING")
 	elseif prefix == "BKBReceive" then
-		Brikabrok.sendMessage("[Brikabrok] Données reçues ...", "WARNING")
+		Brikabrok.formatMessage("Données reçues ...", "WARNING")
 	elseif prefix == "BKBHead" then
 		Brikabrok.dataPlayer,Brikabrok.dataType = strsplit("~", message)
 		if not Brikabrok.dataPlayer == sender then
-			Brikabrok.sendMessage("[Brikabrok] La personne qui vous envoie les données essaye de modifier son identité !", "WARNING")
+			Brikabrok.formatMessage("La personne qui vous envoie les données essaye de modifier son identité !", "WARNING")
 		end
 	elseif prefix == "BKBShareSpells" then
 		AceComm:SendCommMessage("BKBReceive", "", "PARTY", nil, "NORMAL")

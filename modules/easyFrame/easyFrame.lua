@@ -122,13 +122,13 @@ end
           if genderCis == 2 then -- male cis white
 				    local scaleWanted = sScaleRP:GetText()
 				    local scaleDiff = scaleWanted/raceScaleM*100-100
-				    Brikabrok.sendMessage("[Brikabrok] Taille de base de votre race : "..raceScaleM.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
+				    Brikabrok.formatMessage("Taille de base de votre race : "..raceScaleM.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
             local scaleDivM = scaleWanted/raceScaleM
             SendChatMessage(".modify scale "..scaleDivM, "SAY")
           elseif genderCis == 3 then -- female
 				    local scaleWanted = sScaleRP:GetText()
 				    local scaleDiff = scaleWanted/raceScaleF*100-100
-				    Brikabrok.sendMessage("[Brikabrok] Taille de base de votre race : "..raceScaleF.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
+				    Brikabrok.formatMessage("Taille de base de votre race : "..raceScaleF.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
             local scaleDivF = scaleWanted/raceScaleF
             SendChatMessage(".modify scale "..scaleDivF, "SAY")
 			    end
@@ -137,13 +137,13 @@ end
 				if genderCis == 2 then -- male cis white
 					local scaleWanted = sScaleRP:GetText()
 					local scaleDiff = scaleWanted/raceScaleM*100-100
-					Brikabrok.sendMessage("[Brikabrok] Taille de base de votre race : "..raceScaleM.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
+					Brikabrok.formatMessage("Taille de base de votre race : "..raceScaleM.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
 					local scaleDivM = scaleWanted/raceScaleM
 					SendChatMessage(".modify scale "..scaleDivM, "SAY")
 				elseif genderCis == 3 then -- female
 					local scaleWanted = sScaleRP:GetText()
 					local scaleDiff = scaleWanted/raceScaleF*100-100
-					Brikabrok.sendMessage("[Brikabrok] Taille de base de votre race : "..raceScaleF.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
+					Brikabrok.formatMessage("Taille de base de votre race : "..raceScaleF.."cm, Votre taille: "..scaleWanted.."cm, soit une différence de "..scaleDiff.."%","INFO")
 					local scaleDivF = scaleWanted/raceScaleF
 					SendChatMessage(".modify scale "..scaleDivF, "SAY")
 				end
@@ -228,7 +228,7 @@ local function DrawGroupSecondary2(container)
     qsSliderSize:SetLabel("Taille")
     qsSliderSize:SetValue(0)
     qsSliderSize:SetPoint("CENTER", UIParent, "CENTER")
-    qsSliderSize:SetSliderValues(1,50,1)
+    qsSliderSize:SetSliderValues(0.1,50,0.1)
     brikabrokEasyScroll:AddChild(qsSliderSize)
 
     local headingbuttons = AceGUI:Create("Heading")

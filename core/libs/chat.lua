@@ -39,6 +39,7 @@ local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
 --]]
 
 Brikabrok.colors = {}
+Brikabrok.colors["SIMPLE"] = "|cffffffff"
 Brikabrok.colors["SUCCESS"] = "|cff5cb85c"
 Brikabrok.colors["INFO"] = "|cff5bc0de"
 Brikabrok.colors["WARNING"] = "|cfff0ad4e"
@@ -50,4 +51,50 @@ function Brikabrok.sendMessage(msg, priority)
   else
     DEFAULT_CHAT_FRAME:AddMessage(Brikabrok.colors["INFO"]..msg)
   end
+end
+
+function Brikabrok.setColor(color)
+  local color = color or "w"; -- default color if bad argument
+  if color == "r" then return "|cffff0000" end -- red
+  if color == "g" then return "|cff00ff00" end -- green
+  if color == "b" then return "|cff0000ff" end -- blue
+  if color == "y" then return "|cffffff00" end -- yellow
+  if color == "p" then return "|cffff00ff" end -- purple
+  if color == "c" then return "|cff00ffff" end -- cyan
+  if color == "w" then return "|cffffffff" end -- white
+  if color == "0" then return "|cff000000" end -- black
+  if color == "o" then return "|cffffaa00" end -- orange
+  -- Priority
+  if color == "SIMPLE" then return "|cffffffff" end
+  if color == "SUCCESS" then return "|cff5cb85c" end
+  if color == "INFO" then return "|cff5bc0de" end
+  if color == "WARNING" then return "|cfff0ad4e" end
+  if color == "DANGER" then return "|cffd9534f" end
+end
+
+
+function Brikabrok:ShowHelp()
+    local function commandFormat(command,desc)
+        local color = Brikabrok.setColor
+        Brikabrok.sendMessage(color("c").."[Brikabrok] "..color("g").." "..command.." "..color("w").." - "..desc,"SIMPLE")
+    end
+    commandFormat("","Listes des commandes utilitaires")
+    commandFormat("/bkbdev","Ouvre le menu de création")
+    commandFormat("/bkbconvert lien","Converti le lien d'un sort en id")
+end
+
+
+function Brikabrok.formatMessage(message,priority)
+    local color = Brikabrok.setColor
+    Brikabrok.sendMessage(color("c").."[Brikabrok] "..color(priority).." "..message,priority)
+end
+
+
+function Brikabrok:ConvertID(input)
+    if strfind(input,"|Hspell") then
+        local linkType,id = strsplit(":",input)
+        Brikabrok.formatMessage("L'ID du spell est "..id.." .","SUCCESS")
+    else
+        Brikabrok.formatMessage("Veuillez entrer un lien de spell valide en faisant shift+click sur un spell dans votre grimoire.","WARNING")
+    end
 end
