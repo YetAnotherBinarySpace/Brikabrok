@@ -53,10 +53,8 @@ local wrapperNoLinks = {
 	{"%((GUID: (%d+))%)","%((GUID: (%d+))%)","(GUID: %1)"},
 	{"Object '(%d+)","Object '(%d+)'","(Object '%1')"},
 	{"(DisplayID: (%d+))","(DisplayID: (%d+))","(DisplayID: %1)"},
-	{"%((Native: (%d+))%)","%((Native: (%d+))%)","(Native: %1)"}
+	{"%((Native: (%d+))%)","%((Native: (%d+))%)","(Native: %1)"},
 }
-
-local idWrapper = "%1"
 
 function Brikabrok.getLinks(self, event, message, ...)
 	if Brikabrok.db.profile.dynamic_links.active then 
@@ -74,7 +72,7 @@ function Brikabrok.wrapperLinks(self,event,msg,...)
 	local table = wrapperNoLinks
 	if Brikabrok.db.profile.dynamic_links.active then 
 		for guid in string.gmatch(msg, table[1][1]) do 
-			local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r"
+			local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r |cffffffff|Hcommand:.wp add %2|h[Add Waypoint]|h|r |cffffffff|Hcommand:.wp load %2|h[Waypoint Load]|h|r |cffffffff|Hcommand:.wp reload %2|h[Waypoint Reload]|h|r"
 			msg = msg:gsub(table[1][2], npcINFO)
 		end
 		for guid in string.gmatch(msg, table[4][1]) do
@@ -108,6 +106,8 @@ function ItemRefTooltip:SetHyperlink(data, ...)
 	local linkType, chatReplace = strsplit(":", data)
 	if linkType == "command" then
 		SendChatMessage(chatReplace, "GUILD")
+	elseif linkType == "creature" then
+		SendChatMessage(".go creature "..chatReplace, "GUILD")
 	else
 		oldHyperlink(self, data, ...)
 	end

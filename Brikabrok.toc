@@ -2,7 +2,7 @@
 ## Interface: 70300
 #------------- Addon ----------------------------
 ## Title: Le Brikabrok
-## Version: 1.0.2
+## Version: 1.0.3
 ## Notes: Simple, Utile, Fonctionnel : What Else ?
 ## SavedVariables: BrikabrokDB
 #------------- Author ----------------------------
