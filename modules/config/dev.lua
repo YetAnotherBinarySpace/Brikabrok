@@ -295,13 +295,13 @@ function Brikabrok:DrawGroupDev2(container)
     
     local gobDataType = {
         categorie = "Catégorie",
-        other = "Autres",
+        other = "Gob",
     } 
 
   local ebTypeGob = AceGUI:Create("Dropdown")
   ebTypeGob:SetList(gobDataType)
-  ebTypeGob:SetText("Type(semi-optionnel)")
-  ebTypeGob:SetLabel("Type(semi-optionnel)")
+  ebTypeGob:SetText("Type")
+  ebTypeGob:SetLabel("Type")
   brikabrokDevScroll:AddChild(ebTypeGob)
   ebTypeGob:SetCallback("OnValueChanged", function(self,callback,key) keyDev2Drop = key end)
 
@@ -521,13 +521,13 @@ function Brikabrok:DrawGroupDev3(container)
 
     local animDataType = {
         categorie = "Catégorie",
-        other = "Autres",
+        other = "Anim",
     } 
 
   local ebTypeAnim = AceGUI:Create("Dropdown")
   ebTypeAnim:SetList(animDataType)
-  ebTypeAnim:SetText("Type(semi-optionnel)")
-  ebTypeAnim:SetLabel("Type(semi-optionnel)")
+  ebTypeAnim:SetText("Type")
+  ebTypeAnim:SetLabel("Type")
   brikabrokDevScroll:AddChild(ebTypeAnim)
   ebTypeAnim:SetCallback("OnValueChanged", function(self,callback,key) keyDev3Drop = key if keyDev3Drop==other then keyDev3Drop="nil" end end)
 

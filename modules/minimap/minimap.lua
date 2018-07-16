@@ -71,10 +71,10 @@ end
 
 function Brikabrok.MinimapButton_Details(tt, ldb)
   tt:SetText("Le Brikabrok")
-  tt:AddLine("Version : "..Brikabrok.versionmode.." Release",1,1,1)
-  tt:AddLine("Clic gauche: Ouvrir le menu principal",1,1,1)
-  tt:AddLine("Clic droit: Ouvrir le menu rapide",1,1,1)
-  tt:AddLine("Clic Molette: Ouvrir le menu d'ajout",1,1,1)
+  tt:AddLine("Version : "..Brikabrok.setColor("o")..Brikabrok.versionmode..Brikabrok.setColor("w").." Release",1,1,1)
+  tt:AddLine("Clic gauche:"..Brikabrok.setColor("o").. " Ouvrir le menu principal",1,1,1)
+  tt:AddLine("Clic droit:"..Brikabrok.setColor("o").. " Ouvrir le menu rapide",1,1,1)
+  tt:AddLine("Clic Molette:"..Brikabrok.setColor("o").. " Ouvrir le menu d'ajout",1,1,1)
   tt:SetSize(270,90)
 end
 
