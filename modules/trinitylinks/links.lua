@@ -54,6 +54,7 @@ local wrapperNoLinks = {
 	{"Object '(%d+)","Object '(%d+)'","(Object '%1')"},
 	{"(DisplayID: (%d+))","(DisplayID: (%d+))","(DisplayID: %1)"},
 	{"%((Native: (%d+))%)","%((Native: (%d+))%)","(Native: %1)"},
+	{"DB GUID: (%d+)%,","(DB GUID: (%d+)%,)","(DB GUID: %1,)"},
 }
 
 function Brikabrok.getLinks(self, event, message, ...)
@@ -72,8 +73,12 @@ function Brikabrok.wrapperLinks(self,event,msg,...)
 	local table = wrapperNoLinks
 	if Brikabrok.db.profile.dynamic_links.active then 
 		for guid in string.gmatch(msg, table[1][1]) do 
-			local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r |cffffffff|Hcommand:.wp add %2|h[Add Waypoint]|h|r |cffffffff|Hcommand:.wp load %2|h[Waypoint Load]|h|r |cffffffff|Hcommand:.wp reload %2|h[Waypoint Reload]|h|r"
+			local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r"
 			msg = msg:gsub(table[1][2], npcINFO)
+		end
+		for guid in string.gmatch(msg,table[6][1]) do
+			local npcGUID = table[6][3].. " - |cffffffff|Hcommand:.wp add %2|h[Add Waypoint]|h|r |cffffffff|Hcommand:.wp load %2|h[Waypoint Load]|h|r |cffffffff|Hcommand:.wp reload %2|h[Waypoint Reload]|h|r"
+			msg = msg:gsub(table[6][2], npcGUID)
 		end
 		for guid in string.gmatch(msg, table[4][1]) do
 			local npcDisplay = table[4][3].." - |cffffffff|Hcommand:.morph %2|h[Morph]|h|r"
