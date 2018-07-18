@@ -1,4 +1,4 @@
-# Le Bricabrok
+# Le Brikabrok
 ### Simple, fonctionnel, efficace : What Else ?
 
 ---
