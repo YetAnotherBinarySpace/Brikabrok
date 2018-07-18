@@ -66,7 +66,7 @@ local defaults = {
             storage = "Character",
         },
         dynamic_links = {
-            active = false,
+            active = true,
         }
   },
 }
@@ -215,9 +215,6 @@ function Brikabrok:OnInitialize()
     self:RegisterChatCommand("brikabrok","ShowHelp")
     self:RegisterChatCommand("bkb","ShowHelp")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
-    if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
-        C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
-    end
 end
 
 function Brikabrok:OnEnable()
@@ -325,7 +322,7 @@ function Brikabrok:CHAT_MSG_CHANNEL(event,message,author,language,channelname,ta
                         button1 = "Ok",
                         OnAccept = function()
                             antispam = true
-                            Brikabrok.formatMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version, "INFO")
+                            Brikabrok.formatMessage("Les mises à jour du Brikabrok permettent de rajouter du contenu régulièrement, v."..version.. ", vous pouvez télécharger cette mise à jour sur le topic du forum. "INFO")
                         end,
                         timeout = 0,
                         whileDead = true

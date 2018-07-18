@@ -1,24 +1,18 @@
 --[[
-
         _______      ______   ______ _____ _     _ _______ ______   ______  _____  _     _
  |      |______      |_____] |_____/   |   |____/  |_____| |_____] |_____/ |     | |____/ 
  |_____ |______      |_____] |    \_ __|__ |    \_ |     | |_____] |    \_ |_____| |    \_
                                                                                           
-
     MIT License
-
     Copyright (c) 2018 BinarySpace
-
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-
     The above copyright notice and this permission notice shall be included in all
     copies or substantial portions of the Software.
-
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +20,6 @@
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-
 --]]
 
 local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
@@ -58,7 +51,31 @@ local wrapperNoLinks = {
 }
 
 function Brikabrok.getLinks(self, event, message, ...)
-	if Brikabrok.db.profile.dynamic_links.active then 
+	if Brikabrok.db.profile.dynamic_links.active then
+		if not spamNotify == true and IsAddOnLoaded("TrinityAdmin") then
+		    StaticPopupDialogs["BrikabrokTrinity"] = {
+      		text = "Avoir TrinityAdmin et Brikabrok d'activé peut créer des conflits, veuillez désactiver Trinity pour une meilleure utilisation.",
+      		button1 = "Désactiver Trinity",
+      		button2 = "Désactiver lien BKB",
+      		OnAccept = function()
+      			spamNotify = true
+      			Brikabrok.db.profile.dynamic_links.active = true
+      			DisableAddOn("TrinityAdmin")
+          		ReloadUI()
+      		end,
+      		OnCancel = function()
+            	spamNotify = true
+                Brikabrok.db.profile.dynamic_links.active = false
+                Brikabrok.formatMessage("Option 'liens' désactivée", "SIMPLE")
+      		end,
+      		timeout = 0,
+      		whileDead = true,
+      		hideOnEscape = true,
+      		preferredIndex = 3,
+    		}
+    		StaticPopup_Show("BrikabrokTrinity")			
+        end
+        
 		for i=1,#trinityLinks do
 			if message:find(trinityLinks[i][1]) then
 				message = message:gsub(trinityLinks[i][1], trinityLinks[i][2])
@@ -70,33 +87,56 @@ end
 
 
 function Brikabrok.wrapperLinks(self,event,msg,...)
-	local table = wrapperNoLinks
-	if Brikabrok.db.profile.dynamic_links.active then 
-		for guid in string.gmatch(msg, table[1][1]) do 
-			local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r"
-			msg = msg:gsub(table[1][2], npcINFO)
-		end
-		for guid in string.gmatch(msg,table[6][1]) do
-			local npcGUID = table[6][3].. " - |cffffffff|Hcommand:.wp add %2|h[Add Waypoint]|h|r |cffffffff|Hcommand:.wp load %2|h[Waypoint Load]|h|r |cffffffff|Hcommand:.wp reload %2|h[Waypoint Reload]|h|r"
-			msg = msg:gsub(table[6][2], npcGUID)
-		end
-		for guid in string.gmatch(msg, table[4][1]) do
-			local npcDisplay = table[4][3].." - |cffffffff|Hcommand:.morph %2|h[Morph]|h|r"
-			msg = msg:gsub(table[4][2], npcDisplay)
-		end
-		for guid in string.gmatch(msg, table[5][1]) do
-			local npcNative = table[5][3].." - |cffffffff|Hcommand:.morph %2|h[Morph]|h|r"
-			msg = msg:gsub(table[5][2], npcNative)
-		end
-		for guid in string.gmatch(msg, table[3][1]) do 
-			local gobSpawn1 = table[3][3].." - |cffffffff|Hcommand:.gob add %1|h[Spawn]|h|r"
-			msg = msg:gsub(table[3][2], gobSpawn1)
-		end
-		for guid in string.gmatch(msg, table[2][1]) do
-			local gobSpawn = table[2][3].." - |cffffffff|Hcommand:.go object %2|h[Aller à]|h|r |cffffffff|Hcommand:.gob move %2|h[Déplacer]|h|r |cffffffff|Hcommand:.gob activate %2|h[Activer]|h|r |cffffffff|Hcommand:.gob delete %2|h[Supprimer]|h|r"
-			msg = msg:gsub(table[2][2], gobSpawn)
-		end
-    end
+	if Brikabrok.db.profile.dynamic_links.active then
+		if not spamNotify == true and IsAddOnLoaded("TrinityAdmin") then
+		    StaticPopupDialogs["BrikabrokTrinity"] = {
+      		text = "Avoir TrinityAdmin et Brikabrok d'activé peut créer des conflits, veuillez désactiver Trinity pour une meilleure utilisation.",
+      		button1 = "Désactiver Trinity",
+      		button2 = "Désactiver lien BKB",
+      		OnAccept = function()
+      			spamNotify = true
+      			Brikabrok.db.profile.dynamic_links.active = true
+      			DisableAddOn("TrinityAdmin")
+          		ReloadUI()
+      		end,
+      		OnCancel = function()
+            	spamNotify = true
+                Brikabrok.db.profile.dynamic_links.active = false
+                Brikabrok.formatMessage("Option 'liens' désactivée", "SIMPLE")
+      		end,
+      		timeout = 0,
+      		whileDead = true,
+      		hideOnEscape = true,
+      		preferredIndex = 3,
+    		}
+    		StaticPopup_Show("BrikabrokTrinity")			
+        end
+    local table = wrapperNoLinks
+	for guid in string.gmatch(msg, table[1][1]) do 
+		local npcINFO = table[1][3].." - |cffffffff|Hcommand:.np add %2|h[Spawn]|h|r"
+		msg = msg:gsub(table[1][2], npcINFO)
+	end
+	for guid in string.gmatch(msg,table[6][1]) do
+		local npcGUID = table[6][3].. " - |cffffffff|Hcommand:.wp add %2|h[Add Waypoint]|h|r |cffffffff|Hcommand:.wp load %2|h[Waypoint Load]|h|r |cffffffff|Hcommand:.wp reload %2|h[Waypoint Reload]|h|r"
+		msg = msg:gsub(table[6][2], npcGUID)
+	end
+	for guid in string.gmatch(msg, table[4][1]) do
+		local npcDisplay = table[4][3].." - |cffffffff|Hcommand:.morph %2|h[Morph]|h|r"
+		msg = msg:gsub(table[4][2], npcDisplay)
+	end
+	for guid in string.gmatch(msg, table[5][1]) do
+		local npcNative = table[5][3].." - |cffffffff|Hcommand:.morph %2|h[Morph]|h|r"
+		msg = msg:gsub(table[5][2], npcNative)
+	end
+	for guid in string.gmatch(msg, table[3][1]) do 
+		local gobSpawn1 = table[3][3].." - |cffffffff|Hcommand:.gob add %1|h[Spawn]|h|r"
+		msg = msg:gsub(table[3][2], gobSpawn1)
+	end
+	for guid in string.gmatch(msg, table[2][1]) do
+		local gobSpawn = table[2][3].." - |cffffffff|Hcommand:.go object %2|h[Aller à]|h|r |cffffffff|Hcommand:.gob move %2|h[Déplacer]|h|r |cffffffff|Hcommand:.gob activate %2|h[Activer]|h|r |cffffffff|Hcommand:.gob delete %2|h[Supprimer]|h|r"
+		msg = msg:gsub(table[2][2], gobSpawn)
+	end
+	end
     return false, msg, ...
 end
 
