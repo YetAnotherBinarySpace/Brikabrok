@@ -381,7 +381,7 @@ local function SelectGroup(container, event, group)
 end
 
 -- Create main frame
-mainFrame = AceGUI:Create("Brikabrok")
+local mainFrame = AceGUI:Create("Brikabrok")
 mainFrame:SetTitle("Le Brikabrok")
 mainFrame:SetLayout("Fill")
 
@@ -392,5 +392,10 @@ tab:SetTabs({{text="Spells", value="tab1"},{text="Gobs", value="tab2"},{text="Fo
 tab:SetCallback("OnGroupSelected", SelectGroup)
 tab:SelectTab("tab1")
 mainFrame:AddChild(tab)
+
+
+function Brikabrok:OpenMainFrame()
+  mainFrame:Show()
+end
 
 end

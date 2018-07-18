@@ -308,7 +308,7 @@ local function SelectGroupSecondary(container, event, group)
 end
 
 -- Create secondary frame 
-easyFrame = AceGUI:Create("Brikabrok")
+local easyFrame = AceGUI:Create("Brikabrok")
 easyFrame:SetTitle("Brikabrok")
 easyFrame:SetLayout("Fill")
 easyFrame:SetWidth(400)
@@ -322,5 +322,10 @@ tabEasy:SetTabs({{text="Divers", value="tab1"},{text="Gob", value="tab2"}})
 tabEasy:SetCallback("OnGroupSelected", SelectGroupSecondary)
 tabEasy:SelectTab("tab1")
 easyFrame:AddChild(tabEasy)
+
+function Brikabrok:OpenEasyFrame()
+  easyFrame:Show()
+end
+
 
 end

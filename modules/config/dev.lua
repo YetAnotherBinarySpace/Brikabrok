@@ -924,7 +924,7 @@ local function SelectGroupDev(container, event, group)
 end
 
 -- Create secondary frame 
-easyDev = AceGUI:Create("Brikabrok")
+local easyDev = AceGUI:Create("Brikabrok")
 easyDev:SetTitle("Brikabrok")
 easyDev:SetLayout("Fill")
 easyDev:SetWidth(400)
