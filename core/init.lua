@@ -67,6 +67,9 @@ local defaults = {
         },
         dynamic_links = {
             active = true,
+        },
+        everything = {
+            autoclose = false,
         }
   },
 }
@@ -152,6 +155,26 @@ local function LinksConfig()
 end
 
 
+local function EverythingConfig()
+    return {
+        name = "Divers",
+        type = "group",
+        order = 1,
+        args = {
+            frame_autoclose = {
+                name = "Fermeture automatique des autres fenêtres",
+                desc = "Ferme automatiquement les autres fenêtres du Brikabrok lors de l'ouverture d'une nouvelle",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.everything.autoclose = val end,
+                get = function() return Brikabrok.db.profile.everything.autoclose end
+            },
+        }
+    }
+end
+
+
 -----------------------------------
 -------------- Main ---------------
 -----------------------------------
@@ -204,6 +227,8 @@ function Brikabrok:OnInitialize()
     acd:AddToBlizOptions("BrikabrokProfiles", "Profils", "Brikabrok")
     ac:RegisterOptionsTable("Brikabrok ".."Liens",LinksConfig())
     acd:AddToBlizOptions("Brikabrok ".."Liens", "Liens", "Brikabrok")
+    ac:RegisterOptionsTable("Brikabrok ".."Divers",EverythingConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Divers", "Divers", "Brikabrok")
     self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
@@ -212,6 +237,7 @@ function Brikabrok:OnInitialize()
     self:RegisterEvent("CHAT_MSG_CHANNEL")
     self:RegisterChatCommand("bkbdev", "ShowDevFrame")
     self:RegisterChatCommand("bkbconvert","ConvertID")
+    self:RegisterChatCommand("bkbpreview", "callPreview")
     self:RegisterChatCommand("brikabrok","ShowHelp")
     self:RegisterChatCommand("bkb","ShowHelp")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)

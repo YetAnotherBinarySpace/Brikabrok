@@ -393,9 +393,30 @@ tab:SetCallback("OnGroupSelected", SelectGroup)
 tab:SelectTab("tab1")
 mainFrame:AddChild(tab)
 
-
 function Brikabrok:OpenMainFrame()
-  mainFrame:Show()
+  if Brikabrok.db.profile.everything.autoclose then
+    if Brikabrok:IsVisibleEasyFrame() or Brikabrok:IsVisibleDevFrame() then
+      Brikabrok:CloseEasyFrame()
+      Brikabrok:CloseDevFrame()
+      mainFrame:Show()
+    else
+      mainFrame:Show()
+    end
+  else
+    mainFrame:Show()
+  end
+end
+
+function Brikabrok:CloseMainFrame()
+  mainFrame:Hide()
+end
+
+function Brikabrok:IsVisibleMainFrame()
+  if mainFrame:IsVisible() then
+    return true
+  else
+    return false
+  end
 end
 
 end

@@ -164,16 +164,18 @@ end
 --]]
 local function DrawGroupSecondary2(container)
 
-    qsGob = AceGUI:Create("EditBox")
+    local qsGob = AceGUI:Create("EditBox")
     qsGob:SetText("GOB ID")
     qsGob:SetPoint("CENTER")
     qsGob:SetLabel("GOB ID")
     brikabrokEasyScroll:AddChild(qsGob)
 
-    qsButton = AceGUI:Create("Button")
+    local qsButton = AceGUI:Create("Button")
     qsButton:SetText("ID")
     qsButton:SetWidth(200)
-    qsButton:SetCallback("OnClick", function() SendChatMessage(".gob tar", "GUILD") end)
+    qsButton:SetCallback("OnClick", function() 
+      SendChatMessage(".gob tar", "GUILD") 
+    end)
     brikabrokEasyScroll:AddChild(qsButton)
 
     local headingrotate = AceGUI:Create("Heading")
@@ -230,11 +232,6 @@ local function DrawGroupSecondary2(container)
     qsSliderSize:SetPoint("CENTER", UIParent, "CENTER")
     qsSliderSize:SetSliderValues(0.1,50,0.1)
     brikabrokEasyScroll:AddChild(qsSliderSize)
-
-    local headingbuttons = AceGUI:Create("Heading")
-    headingbuttons:SetText("Divers")
-    headingbuttons:SetFullWidth(true)
-    brikabrokEasyScroll:AddChild(headingbuttons)
 	
 	   local qsActivate = AceGUI:Create("Button")
     qsActivate:SetText("Activer")
@@ -248,8 +245,64 @@ local function DrawGroupSecondary2(container)
     }
     Brikabrok:addCallbacks(qsSliderSize, callbacksSize)
 
+
+    local headingbuttons = AceGUI:Create("Heading")
+    headingbuttons:SetText("Déplacement des gobs")
+    headingbuttons:SetFullWidth(true)
+    brikabrokEasyScroll:AddChild(headingbuttons)
+
+    local moveGobX = AceGUI:Create("Slider")
+    moveGobX:SetLabel("X")
+    moveGobX:SetValue(0)
+    moveGobX:SetPoint("CENTER", UIParent, "CENTER")
+    moveGobX:SetSliderValues(-100,100,0)
+    brikabrokEasyScroll:AddChild(moveGobX)
+
+    local moveGobY = AceGUI:Create("Slider")
+    moveGobY:SetLabel("Y")
+    moveGobY:SetValue(0)
+    moveGobY:SetPoint("CENTER", UIParent, "CENTER")
+    moveGobY:SetSliderValues(-100,100,0)
+    brikabrokEasyScroll:AddChild(moveGobY)
+
+    local moveGobZ = AceGUI:Create("Slider")
+    moveGobZ:SetLabel("Z")
+    moveGobZ:SetValue(0)
+    moveGobZ:SetSliderValues(-100,100,0)
+    brikabrokEasyScroll:AddChild(moveGobZ)
+
+    local callbacks = {
+    OnValueChanged = function (value, container, event, group)  end ,
+    OnMouseUp = function (self) 
+    SendChatMessage(".gob move "..qsGob:GetText().." "..Brikabrok.gobCoordX+moveGobX.editbox:GetText().." "..Brikabrok.gobCoordY+moveGobY.editbox:GetText().." "..Brikabrok.gobCoordZ+moveGobZ.editbox:GetText(), "GUILD") 
+    C_Timer.After(1.5, function () SendChatMessage(".go object "..qsGob:GetText(),"GUILD") end) end ,
+    }
+    Brikabrok:addCallbacks(moveGobX, callbacks)
+
+    local callbacks2 = {
+    OnValueChanged = function (value, container, event, group)  end ,
+    OnMouseUp = function (self) SendChatMessage(".gob move "..qsGob:GetText().." "..Brikabrok.gobCoordX+moveGobX.editbox:GetText().." "..Brikabrok.gobCoordY+moveGobY.editbox:GetText().." "..Brikabrok.gobCoordZ+moveGobZ.editbox:GetText(), "GUILD") 
+    C_Timer.After(1.5, function () SendChatMessage(".go object "..qsGob:GetText(),"GUILD") end) end ,
+    }
+    Brikabrok:addCallbacks(moveGobY, callbacks2)
+
+    local callbacks3 = {
+    OnValueChanged = function (value, container, event, group)  end ,
+    OnMouseUp = function (self) SendChatMessage(".gob move "..qsGob:GetText().." "..Brikabrok.gobCoordX+moveGobX.editbox:GetText().." "..Brikabrok.gobCoordY+moveGobY.editbox:GetText().." "..Brikabrok.gobCoordZ+moveGobZ.editbox:GetText(), "GUILD") 
+    C_Timer.After(1.5, function () SendChatMessage(".go object "..qsGob:GetText(),"GUILD") end) end ,
+    }
+    Brikabrok:addCallbacks(moveGobZ, callbacks3)
+
+    local dataButton = AceGUI:Create("Button")
+    dataButton:SetText("Données")
+    dataButton:SetWidth(200)
+    dataButton:SetCallback("OnClick", function() 
+      SendChatMessage(".gob tar", "GUILD") 
+    end)
+    brikabrokEasyScroll:AddChild(dataButton)
+
   -- no documentation needed, get the nearest gob ID
-  function findGuid (self,event,msg)
+  local function findGuid (self,event,msg)
    if string.match (msg, "GUID:") then
     local startPlace,endPlace = string.find(msg, "GUID:")
     local idGob = string.sub(msg, startPlace+6,endPlace+8)
@@ -258,8 +311,21 @@ local function DrawGroupSecondary2(container)
    end
   end
 
+  function Brikabrok.GetCoords(self,event,msg,...)
+  if strfind(msg,"MapId: ") then
+    local gpsCoords = msg:gsub('%s+', '')
+    gpsCoords = gpsCoords:gsub('X:', '')
+    gpsCoords = gpsCoords:gsub('Y', '')
+    gpsCoords = gpsCoords:gsub('Z', '')
+    gpsCoords = gpsCoords:gsub('MapId', '')
+    Brikabrok.gobCoordX,Brikabrok.gobCoordY,Brikabrok.gobCoordZ,Brikabrok.gobMapID = strsplit(":",gpsCoords)
+  end
+  return false,msg,...
+end
+
   for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
     ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, findGuid)
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.GetCoords)
   end
 end
 
@@ -302,8 +368,6 @@ local function SelectGroupSecondary(container, event, group)
       DrawGroupSecondary1(container)
    elseif group == "tab2" then
       DrawGroupSecondary2(container)
-   elseif group == "tab3" then
-	  DrawGroupSecondary3(container)
    end
 end
 
@@ -324,7 +388,29 @@ tabEasy:SelectTab("tab1")
 easyFrame:AddChild(tabEasy)
 
 function Brikabrok:OpenEasyFrame()
-  easyFrame:Show()
+  if Brikabrok.db.profile.everything.autoclose then
+    if Brikabrok:IsVisibleMainFrame() or Brikabrok:IsVisibleDevFrame() then
+      Brikabrok:CloseMainFrame()
+      Brikabrok:CloseDevFrame()
+      easyFrame:Show()
+    else
+      easyFrame:Show()
+    end
+  else
+    easyFrame:Show()
+  end
+end
+
+function Brikabrok:CloseEasyFrame()
+  easyFrame:Hide()
+end
+
+function Brikabrok:IsVisibleEasyFrame()
+  if easyFrame:IsVisible() then
+    return true
+  else
+    return false
+  end
 end
 
 

@@ -81,6 +81,7 @@ function Brikabrok:ShowHelp()
     commandFormat("","Listes des commandes utilitaires")
     commandFormat("/bkbdev","Ouvre le menu de création")
     commandFormat("/bkbconvert lien","Converti le lien d'un sort en id")
+    commandFormat("/bkbpreview","Permet de prévisualiser les gobs")
 end
 
 
@@ -88,7 +89,6 @@ function Brikabrok.formatMessage(message,priority)
     local color = Brikabrok.setColor
     Brikabrok.sendMessage(color("c").."[Brikabrok] "..color(priority).." "..message,priority)
 end
-
 
 function Brikabrok:ConvertID(input)
     if strfind(input,"|Hspell") then

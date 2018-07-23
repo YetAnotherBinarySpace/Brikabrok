@@ -126,8 +126,9 @@ function Brikabrok:showTooltip(tt, ldb, frame)
   if frame=="spells" then
   	tt:SetText("Aide")
   	tt:AddLine("Clic gauche : Apprendre le sort",1,1,1)
+    tt:AddLine("Clic molette : Tester le sort",1,1,1)
   	tt:AddLine("Clic droit : Oublier le sort",1,1,1)
-  	tt:SetSize(250,60)
+  	tt:SetSize(250,80)
   elseif frame=="gobs" then
   	tt:SetText("Aide")
   	tt:AddLine("Clic gauche : Faire spawn un GOB",1,1,1)
@@ -187,7 +188,6 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
               Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID);
             elseif sMacro == "aura" then 
               Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".aura".." "..sID);
-              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", sID);
             elseif sMacro == "casttr" then 
               Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK", ".cast".." "..sID.." ".."tr");
             elseif sMacro == "spellviskit" then 
@@ -203,6 +203,20 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
             else
               SendChatMessage(".learn "..sID, "SAY")
             end
+            elseif buttonMod == "MiddleButton" then
+              if sMacro == "cast" then
+                SendChatMessage(".cast "..sID,"GUILD")
+              elseif sMacro == "aura" then
+                SendChatMessage(".aura "..sID,"GUILD")
+              elseif sMacro == "casttr" then
+                SendChatMessage(".cast".." "..sID.." ".."tr","GUILD")
+              elseif sMacro == "spellviskit" then
+                SendChatMessage(".spellviskit "..sID,"GUILD")
+              elseif sMacro == "spell" then
+                SendChatMessage(".cast "..sID,"GUILD")
+              elseif sMacro == "special" then
+                Brikabrok.formatMessage("Pas de prévisualisation des macros, désolé.", "WARNING")
+              end
             elseif buttonMod == "RightButton" then
               if sMacro == nil then
                 Brikabrok.formatMessage("Vous ne connaissez plus ce sort.", "WARNING")
@@ -297,8 +311,7 @@ function Brikabrok:CreateLabelGobs(text, icon, sID, callbacks)
             SendChatMessage(".gob add "..sID, "GUILD")
           end
         elseif buttonMod == "RightButton" then
-            --Brikabrok.ShowPreview(nil)
-            Brikabrok.formatMessage("Fonctionnalité en cours de développement, désolé.", "INFO")
+          SendChatMessage(".gob info "..sID,"GUILD")
         end
       end,
             OnEnter = function (container, event, group) GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR") Brikabrok:showTooltip(GameTooltip, nil, "gobs")  end ,

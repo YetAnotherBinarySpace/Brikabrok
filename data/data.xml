@@ -35,4 +35,5 @@
 	<Script file="main.lua"/>
 	<Script file="gobs.lua"/>
 	<Script file="spells.lua"/>
+    <Script file="goblist.lua"/>
 </Ui>

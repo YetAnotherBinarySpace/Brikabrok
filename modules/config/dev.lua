@@ -940,7 +940,29 @@ tabDev:SelectTab("tab1")
 easyDev:AddChild(tabDev)
 
 function Brikabrok:ShowDevFrame()
-  easyDev:Show()
+  if Brikabrok.db.profile.everything.autoclose then
+    if Brikabrok:IsVisibleMainFrame() or Brikabrok:IsVisibleEasyFrame() then
+      Brikabrok:CloseMainFrame()
+      Brikabrok:CloseEasyFrame()
+      easyDev:Show()
+    else
+      easyDev:Show()
+    end
+  else
+    easyDev:Show()
+  end
+end
+
+function Brikabrok:CloseDevFrame()
+  easyDev:Hide()
+end
+
+function Brikabrok:IsVisibleDevFrame()
+  if easyDev:IsVisible() then
+    return true
+  else
+    return false
+  end
 end
 
 end

@@ -92,4 +92,3 @@ function Brikabrok:safeDeserialize(structure, default)
     end
     return data;
 end
-
