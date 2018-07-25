@@ -205,17 +205,19 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
             end
             elseif buttonMod == "MiddleButton" then
               if sMacro == "cast" then
-                SendChatMessage(".cast "..sID,"GUILD")
+                SendChatMessage(".cast "..sID,"SAY")
               elseif sMacro == "aura" then
-                SendChatMessage(".aura "..sID,"GUILD")
+                SendChatMessage(".aura "..sID,"SAY")
               elseif sMacro == "casttr" then
-                SendChatMessage(".cast".." "..sID.." ".."tr","GUILD")
+                SendChatMessage(".cast".." "..sID.." ".."tr","SAY")
               elseif sMacro == "spellviskit" then
-                SendChatMessage(".spellviskit "..sID,"GUILD")
+                SendChatMessage(".spellviskit "..sID,"SAY")
               elseif sMacro == "spell" then
-                SendChatMessage(".cast "..sID,"GUILD")
+                SendChatMessage(".cast "..sID,"SAY")
               elseif sMacro == "special" then
                 Brikabrok.formatMessage("Pas de prévisualisation des macros, désolé.", "WARNING")
+              else
+                SendChatMessage(".cast "..sID,"SAY")
               end
             elseif buttonMod == "RightButton" then
               if sMacro == nil then

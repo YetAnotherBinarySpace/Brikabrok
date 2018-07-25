@@ -95,6 +95,7 @@ function Brikabrok:OnCommReceived(prefix, message, distribution, sender)
 							  Brikabrok.db:SetProfile(randomName)
 							  Brikabrok.db.profile.spells = deserializedString
 							  AceComm:SendCommMessage("BKBAccepted", "", "PARTY", nil, "NORMAL")
+							  Brikabrok.formatMessage("Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
 				  end,
 				  OnCancel = function ()
 						AceComm:SendCommMessage("BKBRefused", "", "PARTY", nil, "NORMAL")
@@ -118,6 +119,7 @@ function Brikabrok:OnCommReceived(prefix, message, distribution, sender)
 							  Brikabrok.db:SetProfile(randomName)
 							  Brikabrok.db.profile.gobs = deserializedString
 							  AceComm:SendCommMessage("BKBAccepted", "", "PARTY", nil, "NORMAL")
+							  Brikabrok.formatMessage("Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
 				  end,
 				  OnCancel = function ()
 						AceComm:SendCommMessage("BKBRefused", "", "PARTY", nil, "NORMAL")
@@ -141,6 +143,7 @@ function Brikabrok:OnCommReceived(prefix, message, distribution, sender)
 							  Brikabrok.db:SetProfile(randomName)
 							  Brikabrok.db.profile.anim = deserializedString
 							  AceComm:SendCommMessage("BKBAccepted", "", "PARTY", nil, "NORMAL")
+							  Brikabrok.formatMessage("Vous avez été automatiquement placé(e) sur un nouveau profil.", "INFO")
 				  end,
 				  OnCancel = function ()
 						AceComm:SendCommMessage("BKBRefused", "", "PARTY", nil, "NORMAL")
