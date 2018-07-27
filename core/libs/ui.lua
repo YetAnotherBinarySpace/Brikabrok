@@ -200,6 +200,8 @@ function Brikabrok:createLabelSpells(text, icon, sID,sMacro,sType,sName,callback
               Brikabrok.formatMessage("Vous venez d'utiliser un Starter Pack ! Vous pouvez les macros mettre dans votre barre d'action.", "SUCCESS")
             elseif sID == "0" then
               Brikabrok.formatMessage("Pfah ... ! Pas possible d'apprendre une catégorie en tant que sort, désolé", "WARNING")
+            elseif sMacro == "special" then
+              Brikabrok:CreateMacro(sName, "INV_MISC_QUESTIONMARK",sID);
             else
               SendChatMessage(".learn "..sID, "SAY")
             end

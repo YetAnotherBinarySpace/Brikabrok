@@ -92,3 +92,12 @@ function Brikabrok:safeDeserialize(structure, default)
     end
     return data;
 end
+
+function Brikabrok:correctInput(string,character)
+    local firstCharacter = string:sub(1,1)
+    if firstCharacter == character then
+         return false
+    else
+         return true
+    end
+end

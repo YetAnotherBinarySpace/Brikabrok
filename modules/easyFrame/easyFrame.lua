@@ -170,6 +170,8 @@ local function DrawGroupSecondary2(container)
     qsGob:SetLabel("GOB ID")
     brikabrokEasyScroll:AddChild(qsGob)
 
+    Brikabrok.guidEditBox = qsGob
+
     local qsButton = AceGUI:Create("Button")
     qsButton:SetText("ID")
     qsButton:SetWidth(200)
@@ -301,6 +303,7 @@ local function DrawGroupSecondary2(container)
     end)
     brikabrokEasyScroll:AddChild(dataButton)
 
+  --[[
   -- no documentation needed, get the nearest gob ID
   local function findGuid (self,event,msg)
    if string.match (msg, "GUID:") then
@@ -310,21 +313,22 @@ local function DrawGroupSecondary2(container)
     return false
    end
   end
+  --]]
 
   function Brikabrok.GetCoords(self,event,msg,...)
-  if strfind(msg,"MapId: ") then
-    local gpsCoords = msg:gsub('%s+', '')
-    gpsCoords = gpsCoords:gsub('X:', '')
-    gpsCoords = gpsCoords:gsub('Y', '')
-    gpsCoords = gpsCoords:gsub('Z', '')
-    gpsCoords = gpsCoords:gsub('MapId', '')
-    Brikabrok.gobCoordX,Brikabrok.gobCoordY,Brikabrok.gobCoordZ,Brikabrok.gobMapID = strsplit(":",gpsCoords)
+    if strfind(msg,"MapId: ") then
+      local gpsCoords = msg:gsub('%s+', '')
+      gpsCoords = gpsCoords:gsub('X:', '')
+      gpsCoords = gpsCoords:gsub('Y', '')
+      gpsCoords = gpsCoords:gsub('Z', '')
+      gpsCoords = gpsCoords:gsub('MapId', '')
+      Brikabrok.gobCoordX,Brikabrok.gobCoordY,Brikabrok.gobCoordZ,Brikabrok.gobMapID = strsplit(":",gpsCoords)
+    end
+    return false,msg,...
   end
-  return false,msg,...
-end
 
   for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
-    ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, findGuid)
+    --ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, findGuid)
     ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.GetCoords)
   end
 end

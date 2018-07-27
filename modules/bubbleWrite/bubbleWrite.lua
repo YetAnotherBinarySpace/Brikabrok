@@ -1,6 +1,4 @@
-<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-
-	<!--
+--[[
 
         _______      ______   ______ _____ _     _ _______ ______   ______  _____  _     _
  |      |______      |_____] |_____/   |   |____/  |_____| |_____] |_____/ |     | |____/ 
@@ -29,12 +27,32 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 
--->
-    <Include file="config\config.xml"/>
-    <Include file="mainFrame\mainFrame.xml"/>
-    <Include file="easyFrame\easyFrame.xml"/>
-    <Include file="minimap\minimap.xml"/>
-	<Include file="macros\macros.xml"/>
-    <Include file="trinitylinks\links.xml"/>
-    <Include file="bubbleWrite\bubbleWrite.xml"/>
-</Ui>
+--]]
+
+local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
+BrikabrokBubble = Brikabrok:NewModule("BUBBLE", "AceEvent-3.0","AceComm-3.0","AceHook-3.0")
+local AceGUI = LibStub("AceGUI-3.0")
+
+
+function BrikabrokBubble:OnEnable()
+    --[[
+    for i = 1, NUM_CHAT_WINDOWS do
+        local chatOpened = _G["ChatFrame"..i.."EditBox"] -- Hook global chat frames
+        if chatOpened then
+            self:HookScript(chatOpened,"OnTextChanged", function(self)
+                local input = chatOpened:GetText()
+                if Brikabrok.db.profile.chat.bubble and input:len() > 0 and Brikabrok:correctInput(input,".") and Brikabrok:correctInput(input,"/") then
+                        local channel = chatOpened:GetAttribute("chatType")
+                        if channel == "GUILD" or channel == "PARTY" or channel == "RAID" or channel == "WHISPER" or channel == "RAID_LEADER" or channel == "PARTY_LEADER" then
+                            --print("meme")
+                        else
+                            SendChatMessage(".cast 211565")
+                        end
+                else
+                    SendChatMessage(".unaura 211565")
+                end
+            end)
+        end
+    end
+    --]]
+end

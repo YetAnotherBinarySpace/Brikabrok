@@ -50,8 +50,8 @@ local acd = LibStub("AceConfigDialog-3.0")
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.04"
-Brikabrok.version = "Brikabrok~1.04"
+Brikabrok.versionmode ="1.05"
+Brikabrok.version = "Brikabrok~1.05"
 
 local defaults = {
   profile = {
@@ -70,6 +70,9 @@ local defaults = {
         },
         everything = {
             autoclose = false,
+        },
+        chat = {
+            bubble = true,
         }
   },
 }
@@ -174,6 +177,25 @@ local function EverythingConfig()
     }
 end
 
+local function BubbleConfig()
+    return {
+        name = "Bulle de chat",
+        type = "group",
+        order = 1,
+        args = {
+            chat_bubble = {
+                name = "Activer la bulle de chat",
+                desc = "Affiche une bulle au dessus de votre tête lorsque vous écrivez",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.chat.bubble = val end,
+                get = function() return Brikabrok.db.profile.chat.bubble end
+            },
+        }
+    }
+end
+
 
 -----------------------------------
 -------------- Main ---------------
@@ -191,6 +213,7 @@ function Brikabrok:OnInitialize()
     self:EnableModule("MINIMAP")
     self:EnableModule("MACRO")
     self:EnableModule("TRINITYLINKS")
+    self:EnableModule("BUBBLE")
 
     -- nasty loop to create base for users and AVOID overwrite existing DB
     if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
@@ -229,6 +252,8 @@ function Brikabrok:OnInitialize()
     acd:AddToBlizOptions("Brikabrok ".."Liens", "Liens", "Brikabrok")
     ac:RegisterOptionsTable("Brikabrok ".."Divers",EverythingConfig())
     acd:AddToBlizOptions("Brikabrok ".."Divers", "Divers", "Brikabrok")
+    ac:RegisterOptionsTable("Brikabrok ".."Bulle",BubbleConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Bulle", "Bulle", "Brikabrok")
     self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")

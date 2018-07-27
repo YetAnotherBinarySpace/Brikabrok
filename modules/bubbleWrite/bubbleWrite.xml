@@ -1,6 +1,6 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-	<!--
+<!--
 
         _______      ______   ______ _____ _     _ _______ ______   ______  _____  _     _
  |      |______      |_____] |_____/   |   |____/  |_____| |_____] |_____/ |     | |____/ 
@@ -30,11 +30,7 @@
     SOFTWARE.
 
 -->
-    <Include file="config\config.xml"/>
-    <Include file="mainFrame\mainFrame.xml"/>
-    <Include file="easyFrame\easyFrame.xml"/>
-    <Include file="minimap\minimap.xml"/>
-	<Include file="macros\macros.xml"/>
-    <Include file="trinitylinks\links.xml"/>
-    <Include file="bubbleWrite\bubbleWrite.xml"/>
+
+	
+	<Script file="bubbleWrite.lua"/>
 </Ui>

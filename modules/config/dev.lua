@@ -56,18 +56,18 @@ function Brikabrok:DrawGroupDev1(container)
     bkbICONSpells:SetPoint("CENTER")
     bkbICONSpells:SetLabel("Icône du spell")
     brikabrokDevScroll:AddChild(bkbICONSpells)
-  
-    bkbSpellsICON = AceGUI:Create("Icon")
+	
+	  bkbSpellsICON = AceGUI:Create("Icon")
     bkbSpellsICON:SetImage("Interface\\Icons\\trade_engineering")
-    bkbSpellsICON:SetImageSize(16,16)
+	  bkbSpellsICON:SetImageSize(16,16)
     bkbSpellsICON:SetPoint("CENTER")
     bkbSpellsICON:SetLabel("Icône du spell")
-    local callbacks = {
-      OnClick = function (container, event, group)
-       Brikabrok:ShowBrowserFrame("spells")
-    end
-    }
-    Brikabrok:addCallbacks(bkbSpellsICON, callbacks)
+	  local callbacks = {
+		  OnClick = function (container, event, group)
+			 Brikabrok:ShowBrowserFrame("spells")
+		end
+	  }
+	  Brikabrok:addCallbacks(bkbSpellsICON, callbacks)
     brikabrokDevScroll:AddChild(bkbSpellsICON)
 
     local ebName = AceGUI:Create("EditBox")
@@ -116,13 +116,13 @@ function Brikabrok:DrawGroupDev1(container)
     if cbCategorie:GetValue() == true and keyDevDrop then 
       ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'","categorie"} \n') 
       table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop,"categorie"}) 
-  elseif cbCategorie:GetValue() == true and not keyDevDrop then 
-    Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
+	elseif cbCategorie:GetValue() == true and not keyDevDrop then 
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     elseif cbCategorie:GetValue() == false and keyDevDrop then 
       ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'"} \n') 
       table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop}) 
-  elseif cbCategorie:GetValue() == false and not keyDevDrop then 
-    Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
+	elseif cbCategorie:GetValue() == false and not keyDevDrop then 
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     end
     end)
   brikabrokDevScroll:AddChild(ebButton)
@@ -275,22 +275,22 @@ function Brikabrok:DrawGroupDev2(container)
     brikabrokDevScroll:AddChild(ebContentGob)
         
     bkbICONGob = AceGUI:Create("EditBox")
-    bkbICONGob:SetText("Interface\\Icons\\idicône")
+    bkbICONGob:SetText("Interface\\Icons\\trade_engineering")
     bkbICONGob:SetPoint("CENTER")
     bkbICONGob:SetLabel("Icône du Gob")
     brikabrokDevScroll:AddChild(bkbICONGob)
-  
-    bkbGobICON = AceGUI:Create("Icon")
+	
+	  bkbGobICON = AceGUI:Create("Icon")
     bkbGobICON:SetImage("Interface\\Icons\\trade_engineering")
-    bkbGobICON:SetImageSize(16,16)
+	  bkbGobICON:SetImageSize(16,16)
     bkbGobICON:SetPoint("CENTER")
     bkbGobICON:SetLabel("Icône du gob")
-    local callbacks = {
-      OnClick = function (container, event, group)
-      Brikabrok:ShowBrowserFrame("gobs")
-    end
-    }
-    Brikabrok:addCallbacks(bkbGobICON, callbacks)
+	  local callbacks = {
+		  OnClick = function (container, event, group)
+			Brikabrok:ShowBrowserFrame("gobs")
+		end
+	  }
+	  Brikabrok:addCallbacks(bkbGobICON, callbacks)
     brikabrokDevScroll:AddChild(bkbGobICON)
     
     local gobDataType = {
@@ -316,12 +316,12 @@ function Brikabrok:DrawGroupDev2(container)
   ebButtonGob:SetWidth(200)
   ebButtonGob:SetCallback("OnClick", function() 
     if keyDev2Drop then
-    ebResultGob:SetText('{"'..ebNameGob:GetText()..'","'..ebContentGob:GetText()..'","'..'nil","'..bkbICONGob:GetText()..'","'..keyDev2Drop..'"} \n') 
-    table.insert(Brikabrok.db.profile.gobs,{ebNameGob:GetText(),ebContentGob:GetText(),nil,bkbICONGob:GetText(),keyDev2Drop})
-  elseif not keyDev2Drop then
-    Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
-  end
-  end)
+		ebResultGob:SetText('{"'..ebNameGob:GetText()..'","'..ebContentGob:GetText()..'","'..'nil","'..bkbICONGob:GetText()..'","'..keyDev2Drop..'"} \n') 
+		table.insert(Brikabrok.db.profile.gobs,{ebNameGob:GetText(),ebContentGob:GetText(),nil,bkbICONGob:GetText(),keyDev2Drop})
+	elseif not keyDev2Drop then
+		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
+	end
+	end)
   brikabrokDevScroll:AddChild(ebButtonGob)
 
   local DropdownGobs = {}
@@ -499,24 +499,24 @@ function Brikabrok:DrawGroupDev3(container)
     ebNameAnim:SetPoint("CENTER")
     ebNameAnim:SetLabel("Nom de l'animation")
     brikabrokDevScroll:AddChild(ebNameAnim)
-  
-  bkbICONAnim = AceGUI:Create("EditBox")
+	
+	bkbICONAnim = AceGUI:Create("EditBox")
     bkbICONAnim:SetText("Interface\\Icons\\trade_engineering")
     bkbICONAnim:SetPoint("CENTER")
     bkbICONAnim:SetLabel("Icône de l'anim")
     brikabrokDevScroll:AddChild(bkbICONAnim)
-  
-  bkbAnimICON = AceGUI:Create("Icon")
+	
+	bkbAnimICON = AceGUI:Create("Icon")
     bkbAnimICON:SetImage("Interface\\Icons\\trade_engineering")
-  bkbAnimICON:SetImageSize(16,16)
+	bkbAnimICON:SetImageSize(16,16)
     bkbAnimICON:SetPoint("CENTER")
     bkbAnimICON:SetLabel("Icône de l'anim")
-  local callbacks = {
-    OnClick = function (container, event, group)
-      Brikabrok:ShowBrowserFrame("anims")
-    end
-  }
-  Brikabrok:addCallbacks(bkbAnimICON, callbacks)
+	local callbacks = {
+		OnClick = function (container, event, group)
+			Brikabrok:ShowBrowserFrame("anims")
+		end
+	}
+	Brikabrok:addCallbacks(bkbAnimICON, callbacks)
     brikabrokDevScroll:AddChild(bkbAnimICON)
 
     local animDataType = {
@@ -798,28 +798,28 @@ function Brikabrok:DrawGroupDev4(container)
   ebShare:SetText("Envoyer")
   ebShare:SetWidth(200)
   ebShare:SetCallback("OnClick", function()
-  local playerName = UnitName("player") 
-  if UnitInParty("target") and GetNumGroupMembers() == 2 then
-    if keyDev28Drop == "spells" then
-      local header = playerName.."~"..keyDev28Drop
-      AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
-      local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.spells)
-      AceComm:SendCommMessage("BKBShareSpells", shortString, "PARTY", nil, "NORMAL")
-    elseif keyDev28Drop == "gobs" then
-      local header = playerName.."~"..keyDev28Drop
-      AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
-      local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.gobs)
-      AceComm:SendCommMessage("BKBShareGobs", shortString, "PARTY", nil, "NORMAL")
-    elseif keyDev28Drop == "anims" then 
-      local header = playerName.."~"..keyDev28Drop
-      AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
-      local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.anim)
-      AceComm:SendCommMessage("BKBShareAnims", shortString, "PARTY", nil, "NORMAL")
-    end
-    Brikabrok.formatMessage("Données envoyées avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
+	local playerName = UnitName("player") 
+	if UnitInParty("target") and GetNumGroupMembers() == 2 then
+		if keyDev28Drop == "spells" then
+			local header = playerName.."~"..keyDev28Drop
+			AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
+			local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.spells)
+			AceComm:SendCommMessage("BKBShareSpells", shortString, "PARTY", nil, "NORMAL")
+		elseif keyDev28Drop == "gobs" then
+			local header = playerName.."~"..keyDev28Drop
+			AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
+			local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.gobs)
+			AceComm:SendCommMessage("BKBShareGobs", shortString, "PARTY", nil, "NORMAL")
+		elseif keyDev28Drop == "anims" then 
+			local header = playerName.."~"..keyDev28Drop
+			AceComm:SendCommMessage("BKBHead", header, "PARTY", nil, "NORMAL")
+			local shortString = Brikabrok:SerializeTable(Brikabrok.db.profile.anim)
+			AceComm:SendCommMessage("BKBShareAnims", shortString, "PARTY", nil, "NORMAL")
+		end
+		Brikabrok.formatMessage("Données envoyées avec succès, en attente d'une réponse ... ( le transfert peut être relativement long en fonction de la taille des données ):", "SUCCESS")
     else
-    Brikabrok.formatMessage("Veuillez sélectionner votre cible et être dans un groupe à deux!", "WARNING") 
-  end
+		Brikabrok.formatMessage("Veuillez sélectionner votre cible et être dans un groupe à deux!", "WARNING") 
+	end
   end)
   brikabrokDevScroll:AddChild(ebShare)
 
