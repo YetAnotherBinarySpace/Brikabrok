@@ -82,7 +82,9 @@ function Brikabrok.getLinks(self, event, message, ...)
 		for i=1,#trinityLinks do
 			if message:find(trinityLinks[i][1]) then
 				for guid in string.gmatch(message, "GUID: (%d+)") do
-   					Brikabrok.guidEditBox:SetText(guid)
+					if Brikabrok.guidEditBox then
+   						Brikabrok.guidEditBox:SetText(guid)
+   					end
 				end
 				message = message:gsub(trinityLinks[i][1], trinityLinks[i][2])
 			end

@@ -341,6 +341,240 @@ end
 --]]
 local function DrawGroupSecondary3(container)
 
+    local move = {forward = "Devant", backward = "Derrière",left = "Gauche",right = "Droite",down = "Bas",top = "Haut"}
+
+    local rotate = {north = "Nord",south = "Sud ", east = "Est" , west = "Ouest", right = "Droite", left="Gauche"}
+
+    local headingMove = AceGUI:Create("Heading")
+    headingMove:SetText("Move")
+    headingMove:SetFullWidth(true)
+    brikabrokEasyScroll:AddChild(headingMove)
+
+    local xCurrentPos = AceGUI:Create("Label")
+    if Brikabrok.plyCoordX ~= nil then
+      xCurrentPos:SetText("X: "..Brikabrok.plyCoordX)
+    else
+      xCurrentPos:SetText("X: Inconnu")
+    end
+    brikabrokEasyScroll:AddChild(xCurrentPos)
+
+    local yCurrentPos = AceGUI:Create("Label")
+    if Brikabrok.plyCoordY ~= nil then
+      yCurrentPos:SetText("Y: "..Brikabrok.plyCoordY)
+    else
+      yCurrentPos:SetText("Y: Inconnu")
+    end
+    brikabrokEasyScroll:AddChild(yCurrentPos)
+
+    local zCurrentPos = AceGUI:Create("Label")
+    if Brikabrok.plyCoordX ~= nil then
+      zCurrentPos:SetText("Z: "..Brikabrok.plyCoordZ)
+    else
+      zCurrentPos:SetText("Z: Inconnu")
+    end
+    brikabrokEasyScroll:AddChild(zCurrentPos)
+
+    local oCurrentPos = AceGUI:Create("Label")
+    if Brikabrok.plyOrientation ~= nil then
+      oCurrentPos:SetText("Orientation: "..Brikabrok.plyOrientation)
+    else
+      oCurrentPos:SetText("Orientation: Inconnue")
+    end
+    brikabrokEasyScroll:AddChild(oCurrentPos)
+
+    local moveAxeX = AceGUI:Create("EditBox")
+    moveAxeX:SetText("0")
+    moveAxeX:SetLabel("Se déplacer")
+    moveAxeX:SetWidth(160)
+    moveAxeX:SetCallback("OnTextChanged", function() 
+    end)
+    brikabrokEasyScroll:AddChild(moveAxeX)
+
+    local ChooseMoveAxeX = AceGUI:Create("Dropdown")
+    ChooseMoveAxeX:SetList(move)
+    ChooseMoveAxeX:SetLabel("Définissez la direction")
+    ChooseMoveAxeX:SetWidth(160)
+    brikabrokEasyScroll:AddChild(ChooseMoveAxeX)
+    ChooseMoveAxeX:SetCallback("OnValueChanged", function(self,callback,key) Brikabrok.directionX = key  end)
+
+
+    local moveAxeY = AceGUI:Create("EditBox")
+    moveAxeY:SetText("0")
+    moveAxeY:SetLabel("Se déplacer")
+    moveAxeY:SetWidth(160)
+    moveAxeY:SetCallback("OnTextChanged", function() 
+    end)
+    brikabrokEasyScroll:AddChild(moveAxeY)
+
+    local ChooseMoveAxeY = AceGUI:Create("Dropdown")
+    ChooseMoveAxeY:SetList(move)
+    ChooseMoveAxeY:SetLabel("Définissez la direction")
+    ChooseMoveAxeY:SetWidth(160)
+    brikabrokEasyScroll:AddChild(ChooseMoveAxeY)
+    ChooseMoveAxeY:SetCallback("OnValueChanged", function(self,callback,key) Brikabrok.directionY = key end)
+
+    local moveAxeZ = AceGUI:Create("EditBox")
+    moveAxeZ:SetText("0")
+    moveAxeZ:SetLabel("Se déplacer")
+    moveAxeZ:SetWidth(160)
+    moveAxeZ:SetCallback("OnTextChanged", function() 
+    end)
+    brikabrokEasyScroll:AddChild(moveAxeZ)
+
+    local ChooseMoveAxeZ = AceGUI:Create("Dropdown")
+    ChooseMoveAxeZ:SetList(move)
+    ChooseMoveAxeZ:SetLabel("Définissez la direction")
+    ChooseMoveAxeZ:SetWidth(160)
+    brikabrokEasyScroll:AddChild(ChooseMoveAxeZ)
+    ChooseMoveAxeZ:SetCallback("OnValueChanged", function(self,callback,key) Brikabrok.directionZ = key  end)
+
+    local moveAxeO = AceGUI:Create("EditBox")
+    moveAxeO:SetText("0")
+    moveAxeO:SetLabel("Orientation ( Degré(s) )")
+    moveAxeO:SetWidth(160)
+    moveAxeO:SetCallback("OnTextChanged", function() 
+    end)
+    brikabrokEasyScroll:AddChild(moveAxeO)
+
+    local ChooseMoveAxeO = AceGUI:Create("Dropdown")
+    ChooseMoveAxeO:SetList(rotate)
+    ChooseMoveAxeO:SetLabel("Pivoter à")
+    ChooseMoveAxeO:SetWidth(160)
+    brikabrokEasyScroll:AddChild(ChooseMoveAxeO)
+    ChooseMoveAxeO:SetCallback("OnValueChanged", function(self,callback,key) Brikabrok.directionO = key  end)
+
+    local dataButton = AceGUI:Create("Button")
+    dataButton:SetText("Données")
+    dataButton:SetWidth(200)
+    dataButton:SetCallback("OnClick", function() 
+      SendChatMessage(".gps", "GUILD")
+    end)
+    brikabrokEasyScroll:AddChild(dataButton)
+
+  function Brikabrok.convertTeleport()
+
+      local modX,modY,modZ,modO = moveAxeX:GetText(),moveAxeY:GetText(),moveAxeZ:GetText(),moveAxeO:GetText()
+      local x,y,z,o,mapID = Brikabrok.plyCoordX,Brikabrok.plyCoordY,Brikabrok.plyCoordZ,Brikabrok.plyOrientation,Brikabrok.currentMap
+      local oldX,oldY,oldZ,oldO = x,y,z,o
+
+      -- X part
+      if (Brikabrok.directionX == "forward") then
+        x = Brikabrok.plyCoordX + modX
+      elseif (Brikabrok.directionX == "backward") then
+        x = Brikabrok.plyCoordX - modX
+      elseif (Brikabrok.directionX == "left") then
+        y = Brikabrok.plyCoordY + modX
+      elseif (Brikabrok.directionX == "right") then
+        y = Brikabrok.plyCoordY - modX
+      elseif (Brikabrok.directionX == "top") then
+        z = Brikabrok.plyCoordZ + modX
+      elseif (Brikabrok.directionX == "down") then
+        z = Brikabrok.plyCoordZ - modX
+      end
+      -- Y part
+      if (Brikabrok.directionY == "forward") then
+        x = Brikabrok.plyCoordX + modY
+      elseif (Brikabrok.directionY == "backward") then
+        x = Brikabrok.plyCoordX - modY
+      elseif (Brikabrok.directionY == "left") then
+        y = Brikabrok.plyCoordY + modY
+      elseif (Brikabrok.directionY == "right") then
+        y = Brikabrok.plyCoordY - modY
+      elseif (Brikabrok.directionY == "top") then
+        z = Brikabrok.plyCoordZ + modY
+      elseif (Brikabrok.directionY == "down") then
+        z = Brikabrok.plyCoordZ - modY
+      end
+      -- Z part
+      if (Brikabrok.directionZ == "forward") then
+        x = Brikabrok.plyCoordX + modZ
+      elseif (Brikabrok.directionZ == "backward") then
+        x = Brikabrok.plyCoordX - modZ
+      elseif (Brikabrok.directionZ == "left") then
+        y = Brikabrok.plyCoordY + modZ
+      elseif (Brikabrok.directionZ == "right") then
+        y = Brikabrok.plyCoordY - modZ
+      elseif (Brikabrok.directionZ == "top") then
+        z = Brikabrok.plyCoordZ + modZ
+      elseif (Brikabrok.directionZ == "down") then
+        z = Brikabrok.plyCoordZ - modZ
+      end
+      -- Orientation part
+      if (Brikabrok.directionO == "north") then
+        o = 0
+        moveAxeO:SetText(math.deg(o))
+      elseif (Brikabrok.directionO == "south") then
+        o = math.pi
+        moveAxeO:SetText(math.deg(o))
+      elseif (Brikabrok.directionO == "west") then
+        o = math.pi/2
+        moveAxeO:SetText(math.deg(o))
+      elseif (Brikabrok.directionO == "east") then
+        o = 3*math.pi/2
+        moveAxeO:SetText(math.deg(o))
+      elseif (Brikabrok.directionO == "right") then
+        o =  Brikabrok.plyOrientation + (-math.rad(modO))
+      elseif (Brikabrok.directionO == "left") then
+        o =  Brikabrok.plyOrientation + math.rad(modO)
+      end
+
+    return x,y,z,o,Brikabrok.currentMap,oldX,oldY,oldZ,oldO
+  end
+
+    local move = AceGUI:Create("Button")
+    move:SetText("Se déplacer")
+    move:SetWidth(200)
+    move:SetCallback("OnClick", function() 
+      local x,y,z,o,map = Brikabrok.convertTeleport()
+      x,y,z,o,map = tostring(x),tostring(y),tostring(z),tostring(o),tostring(map)
+      x,y,z,o = x:sub(1,8), y:sub(1,8), z:sub(1,8), o:sub(1,8)
+      SendChatMessage(".go xyz "..x.." "..y.. " "..z.." "..map.." "..o, "SAY")
+      C_Timer.After(0.4, function () SendChatMessage(".gps", "GUILD")
+        if (Brikabrok.plyCoordX or Brikabrok.plyCoordY or Brikabrok.plyCoordZ) == (x or y or z) then
+          SendChatMessage(".gps", "GUILD")
+        end
+      end)
+    end)
+    brikabrokEasyScroll:AddChild(move)
+
+    local moveBack = AceGUI:Create("Button")
+    moveBack:SetText("Revenir en arrière")
+    moveBack:SetWidth(200)
+    moveBack:SetCallback("OnClick", function() 
+      SendChatMessage(".recall", "SAY")
+    end)
+    brikabrokEasyScroll:AddChild(moveBack)
+
+
+  function Brikabrok.GetCoordsPlayer(self,event,msg,...)
+    if Brikabrok:IsVisibleEasyFrame() then
+      if strfind(msg,"Orientation:") and strfind(msg,"X:") then
+        local playerCoords = msg:gsub('%s+', '')
+        playerCoords = playerCoords:gsub('X:', '')
+        playerCoords = playerCoords:gsub('Y', '')
+        playerCoords = playerCoords:gsub('Z', '')
+        playerCoords = playerCoords:gsub('Orientation', '')
+          Brikabrok.plyCoordX,Brikabrok.plyCoordY,Brikabrok.plyCoordZ,Brikabrok.plyOrientation = strsplit(":",playerCoords)
+          local degrees = tostring(math.deg(Brikabrok.plyOrientation))
+          local shortDegrees = degrees:sub(1,5)
+          xCurrentPos:SetText("X: "..Brikabrok.plyCoordX)
+          yCurrentPos:SetText("Y: "..Brikabrok.plyCoordY) 
+          zCurrentPos:SetText("Z: "..Brikabrok.plyCoordZ)
+          oCurrentPos:SetText("Orientation: "..Brikabrok.plyOrientation.." radian(s) soit "..shortDegrees.." degré(s)")
+      elseif strfind(msg,"Map:") then
+        for map in string.gmatch(msg, "Map: (%d+) %(%)") do
+            Brikabrok.currentMap = map
+        end
+      end
+    end
+    return false,msg,...
+  end
+
+  for k, v in pairs({"EMOTE", "GUILD", "OFFICER", "PARTY", "PARTY_LEADER", "RAID", "RAID_LEADER", "SAY", "SYSTEM", "WHISPER", "WHISPER_INFORM", "YELL"}) do
+    --ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, findGuid)
+    ChatFrame_AddMessageEventFilter("CHAT_MSG_"..v, Brikabrok.GetCoordsPlayer)
+  end
+
 
 end
 
@@ -372,6 +606,8 @@ local function SelectGroupSecondary(container, event, group)
       DrawGroupSecondary1(container)
    elseif group == "tab2" then
       DrawGroupSecondary2(container)
+   elseif group == "tab3" then
+      DrawGroupSecondary3(container)
    end
 end
 
@@ -386,7 +622,7 @@ easyFrame:SetHeight(520)
 -- Add tabs here for the second frame
 local tabEasy =  AceGUI:Create("TabGroup")
 tabEasy:SetLayout("Flow")
-tabEasy:SetTabs({{text="Divers", value="tab1"},{text="Gob", value="tab2"}})
+tabEasy:SetTabs({{text="Divers", value="tab1"},{text="Gob", value="tab2"},{text="Move", value="tab3"}})
 tabEasy:SetCallback("OnGroupSelected", SelectGroupSecondary)
 tabEasy:SelectTab("tab1")
 easyFrame:AddChild(tabEasy)
