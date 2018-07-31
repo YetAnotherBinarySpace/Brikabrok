@@ -76,7 +76,7 @@ function Brikabrok:DrawGroupDev1(container)
     ebName:SetLabel("Nom du spell")
     brikabrokDevScroll:AddChild(ebName)
 
-    local ebContent = AceGUI:Create("EditBox")
+    local ebContent = AceGUI:Create("MultiLineEditBox")
     ebContent:SetText("Contenu ( ID Spell, Macro, ... )")
     ebContent:SetPoint("CENTER")
     ebContent:SetLabel("Contenu ( ID Spell, Macro, ... )")
