@@ -265,6 +265,8 @@ function Brikabrok:OnInitialize()
     self:RegisterChatCommand("bkbpreview", "callPreview")
     self:RegisterChatCommand("brikabrok","ShowHelp")
     self:RegisterChatCommand("bkb","ShowHelp")
+    self:RegisterChatCommand("in","commandIN")
+    self:RegisterChatCommand("bkbin","commandIN")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
     if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
         C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)

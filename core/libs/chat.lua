@@ -30,6 +30,7 @@
 --]]
 
 local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
+local AceTimer = LibStub("AceTimer-3.0")
 
 --[[
 **   Brikabrok.sendMessage
@@ -82,6 +83,7 @@ function Brikabrok:ShowHelp()
     commandFormat("/bkbdev","Ouvre le menu de création")
     commandFormat("/bkbconvert lien","Converti le lien d'un sort en id")
     commandFormat("/bkbpreview","Permet de prévisualiser les gobs")
+    commandFormat("/in ","Permet de délayer une action du chat.")
 end
 
 
@@ -97,4 +99,24 @@ function Brikabrok:ConvertID(input)
     else
         Brikabrok.formatMessage("Veuillez entrer un lien de spell valide en faisant shift+click sur un spell dans votre grimoire.","WARNING")
     end
+end
+
+-- Ripped code from /slashin Addon, all credits to @funkydude for this implementation
+-- to:do // do own implementation here
+
+
+local MacroEditBox_OnEvent = MacroEditBox:GetScript("OnEvent")
+
+local function OnCallback(command)
+  MacroEditBox_OnEvent(MacroEditBox, "EXECUTE_CHAT_LINE", command)
+end
+
+function Brikabrok:commandIN(input)
+  local secs, command = input:match("^([^%s]+)%s+(.*)$")
+  secs = tonumber(secs)
+  if (not secs) or (not input) then
+     Brikabrok.formatMessage("Utilisation de la commande /in invalide, devrait suivre le format /in < secondes > < commande >.","WARNING")
+  else
+    AceTimer:ScheduleTimer(OnCallback, secs, command)
+  end
 end
