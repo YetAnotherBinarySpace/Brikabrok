@@ -46,6 +46,38 @@ function BrikabrokCONFIG:OnEnable()
 --]]
 function Brikabrok:DrawGroupDev1(container)
 
+
+    local DropdownSpells = {}
+    function Brikabrok:buildTableSpells()
+      for i=1,#Brikabrok.db.profile.spells do
+        if not Brikabrok.db.profile.spells[i] then
+            return false
+        else
+          local spName = Brikabrok.db.profile.spells[i][2]
+          local spIcon = Brikabrok.db.profile.spells[i][1]
+          if spIcon == nil then
+            spIcon = "Interface\\Icons\\trade_engineering"
+          end
+          DropdownSpells[i] = "|T"..spIcon..":16|t "..spName
+        end
+      end
+    end
+
+    local function refreshTable(widget,widget1)
+      DropdownSpells = {}
+      Brikabrok:buildTableSpells()
+    end
+
+    local function tableSwap(table,firstValue,secondValue)
+      local contentValue1 = table[firstValue]
+      local contentValue2 = table[secondValue]
+      table[firstValue] = contentValue2
+      table[secondValue] = contentValue1
+    end
+
+
+    Brikabrok:buildTableSpells()
+
     local addSpellsHeading = AceGUI:Create("Heading")
     addSpellsHeading:SetText("Ajouter des spells")
     addSpellsHeading:SetFullWidth(true)
@@ -94,12 +126,21 @@ function Brikabrok:DrawGroupDev1(container)
         special = "Macro",
         spellviskit = "Spellviskit"
     } 
+  local addIndex = AceGUI:Create("CheckBox")
+  addIndex:SetLabel("Ajouter après un autre spell déjà existant")
+  brikabrokDevScroll:AddChild(addIndex)
 
+  local ebIndex = AceGUI:Create("Dropdown")
+  ebIndex:SetList(DropdownSpells)
+  ebIndex:SetText("Choissisez un spell")
+  ebIndex:SetLabel("Insérer après")
+  brikabrokDevScroll:AddChild(ebIndex)
+  ebIndex:SetCallback("OnValueChanged", function(self,callback,key) insertKey = key end)
 
   local ebType= AceGUI:Create("Dropdown")
   ebType:SetList(spDataType)
-  ebType:SetText("Type(semi-optionnel)")
-  ebType:SetLabel("Type(semi-optionnel)")
+  ebType:SetText("Type")
+  ebType:SetLabel("Type")
   brikabrokDevScroll:AddChild(ebType)
   ebType:SetCallback("OnValueChanged", function(self,callback,key) keyDevDrop = key end)
 
@@ -113,52 +154,22 @@ function Brikabrok:DrawGroupDev1(container)
   ebButton:SetText("Build")
   ebButton:SetWidth(200)
   ebButton:SetCallback("OnClick", function() 
-    if cbCategorie:GetValue() == true and keyDevDrop then 
-      ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'","categorie"} \n') 
-      table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop,"categorie"}) 
-	elseif cbCategorie:GetValue() == true and not keyDevDrop then 
-		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
-    elseif cbCategorie:GetValue() == false and keyDevDrop then 
+    if cbCategorie:GetValue() == true and keyDevDrop and addIndex:GetValue() then 
+        ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'","categorie"} \n') 
+        table.insert(Brikabrok.db.profile.spells,insertKey+1,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop,"categorie"}) 
+  	elseif cbCategorie:GetValue() == true and not keyDevDrop then 
+  		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
+    elseif cbCategorie:GetValue() == false and keyDevDrop and addIndex:GetValue() then 
+      ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'"} \n') 
+      table.insert(Brikabrok.db.profile.spells,insertKey+1,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop}) 
+  	elseif cbCategorie:GetValue() == false and not keyDevDrop and addIndex:GetValue() == false then 
+  		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
+    elseif cbCategorie:GetValue() == false and keyDevDrop and addIndex:GetValue() == false then 
       ebResult:SetText('{"'..bkbICONSpells:GetText()..'","'..ebName:GetText()..'","'..'nil","'..ebContent:GetText()..'","'..keyDevDrop..'"} \n') 
       table.insert(Brikabrok.db.profile.spells,{bkbICONSpells:GetText(),ebName:GetText(),nil,ebContent:GetText(),keyDevDrop}) 
-	elseif cbCategorie:GetValue() == false and not keyDevDrop then 
-		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     end
-    end)
+  end)
   brikabrokDevScroll:AddChild(ebButton)
-
-
-
-  local DropdownSpells = {}
-  function Brikabrok:buildTableSpells()
-    for i=1,#Brikabrok.db.profile.spells do
-      if not Brikabrok.db.profile.spells[i] then
-          return false
-      else
-        local spName = Brikabrok.db.profile.spells[i][2]
-        local spIcon = Brikabrok.db.profile.spells[i][1]
-        if spIcon == nil then
-          spIcon = "Interface\\Icons\\trade_engineering"
-        end
-        DropdownSpells[i] = "|T"..spIcon..":16|t "..spName
-      end
-    end
-  end
-
-  local function refreshTable(widget,widget1)
-    DropdownSpells = {}
-    Brikabrok:buildTableSpells()
-  end
-
-  local function tableSwap(table,firstValue,secondValue)
-    local contentValue1 = table[firstValue]
-    local contentValue2 = table[secondValue]
-    table[firstValue] = contentValue2
-    table[secondValue] = contentValue1
-  end
-
-
-  Brikabrok:buildTableSpells()
 
 
   local remSpellsHeading = AceGUI:Create("Heading")
@@ -247,7 +258,7 @@ function Brikabrok:DrawGroupDev1(container)
   local ebButtonRefresh = AceGUI:Create("Button")
   ebButtonRefresh:SetText("Actualiser")
   ebButtonRefresh:SetWidth(200)
-  ebButtonRefresh:SetCallback("OnClick", function() refreshTable() ebDelete:SetList(DropdownSpells) ebSwap1:SetList(DropdownSpells)  ebSwap2:SetList(DropdownSpells) end)
+  ebButtonRefresh:SetCallback("OnClick", function() refreshTable() ebDelete:SetList(DropdownSpells) ebSwap1:SetList(DropdownSpells)  ebSwap2:SetList(DropdownSpells) ebIndex:SetList(DropdownSpells) end)
   brikabrokDevScroll:AddChild(ebButtonRefresh)
 
 
@@ -261,6 +272,37 @@ end
 **    container: Which container hold this
 --]]
 function Brikabrok:DrawGroupDev2(container)
+
+    local DropdownGobs = {}
+    function Brikabrok:buildTableGobs()
+      for i=1,#Brikabrok.db.profile.gobs do
+        if not Brikabrok.db.profile.gobs[i] then
+            return false
+        else
+          local gobName = Brikabrok.db.profile.gobs[i][1]
+          local gobIcon = Brikabrok.db.profile.gobs[i][4]
+          if gobIcon == nil then
+            gobIcon = "Interface\\Icons\\trade_engineering"
+          end
+          DropdownGobs[i] = "|T"..gobIcon..":16|t "..gobName
+        end
+      end
+    end
+
+    local function refreshTableGobs()
+      DropdownGobs = {}
+      Brikabrok:buildTableGobs()
+    end
+
+    local function tableSwap(table,firstValue,secondValue)
+      local contentValue1 = table[firstValue]
+      local contentValue2 = table[secondValue]
+      table[firstValue] = contentValue2
+      table[secondValue] = contentValue1
+    end
+
+
+    Brikabrok:buildTableGobs()
 
     local ebNameGob = AceGUI:Create("EditBox")
     ebNameGob:SetText("Nom du gob")
@@ -305,6 +347,17 @@ function Brikabrok:DrawGroupDev2(container)
   brikabrokDevScroll:AddChild(ebTypeGob)
   ebTypeGob:SetCallback("OnValueChanged", function(self,callback,key) keyDev2Drop = key end)
 
+  local addIndexGob = AceGUI:Create("CheckBox")
+  addIndexGob:SetLabel("Ajouter après un autre gob déjà existant")
+  brikabrokDevScroll:AddChild(addIndexGob)
+
+  local ebIndexGob = AceGUI:Create("Dropdown")
+  ebIndexGob:SetList(DropdownGobs)
+  ebIndexGob:SetText("Choissisez un gob")
+  ebIndexGob:SetLabel("Insérer après")
+  brikabrokDevScroll:AddChild(ebIndexGob)
+  ebIndexGob:SetCallback("OnValueChanged", function(self,callback,key) insertKeyGob = key end)
+
   local ebResultGob = AceGUI:Create("MultiLineEditBox")
   ebResultGob:SetText("Résultat")
   ebResultGob:SetPoint("CENTER")
@@ -315,45 +368,17 @@ function Brikabrok:DrawGroupDev2(container)
   ebButtonGob:SetText("Build")
   ebButtonGob:SetWidth(200)
   ebButtonGob:SetCallback("OnClick", function() 
-    if keyDev2Drop then
+  if keyDev2Drop and addIndexGob:GetValue() == false then
 		ebResultGob:SetText('{"'..ebNameGob:GetText()..'","'..ebContentGob:GetText()..'","'..'nil","'..bkbICONGob:GetText()..'","'..keyDev2Drop..'"} \n') 
 		table.insert(Brikabrok.db.profile.gobs,{ebNameGob:GetText(),ebContentGob:GetText(),nil,bkbICONGob:GetText(),keyDev2Drop})
 	elseif not keyDev2Drop then
 		Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
-	end
+  elseif keyDev2Drop and addIndexGob:GetValue() then
+    ebResultGob:SetText('{"'..ebNameGob:GetText()..'","'..ebContentGob:GetText()..'","'..'nil","'..bkbICONGob:GetText()..'","'..keyDev2Drop..'"} \n') 
+    table.insert(Brikabrok.db.profile.gobs,insertKeyGob+1,{ebNameGob:GetText(),ebContentGob:GetText(),nil,bkbICONGob:GetText(),keyDev2Drop})
+  end
 	end)
   brikabrokDevScroll:AddChild(ebButtonGob)
-
-  local DropdownGobs = {}
-  function Brikabrok:buildTableGobs()
-    for i=1,#Brikabrok.db.profile.gobs do
-      if not Brikabrok.db.profile.gobs[i] then
-          return false
-      else
-        local gobName = Brikabrok.db.profile.gobs[i][1]
-        local gobIcon = Brikabrok.db.profile.gobs[i][4]
-        if gobIcon == nil then
-          gobIcon = "Interface\\Icons\\trade_engineering"
-        end
-        DropdownGobs[i] = "|T"..gobIcon..":16|t "..gobName
-      end
-    end
-  end
-
-  local function refreshTableGobs()
-    DropdownGobs = {}
-    Brikabrok:buildTableGobs()
-  end
-
-  local function tableSwap(table,firstValue,secondValue)
-    local contentValue1 = table[firstValue]
-    local contentValue2 = table[secondValue]
-    table[firstValue] = contentValue2
-    table[secondValue] = contentValue1
-  end
-
-
-  Brikabrok:buildTableGobs()
 
   local remGobsHeading = AceGUI:Create("Heading")
   remGobsHeading:SetText("Supprimer des gobs")
@@ -440,9 +465,10 @@ function Brikabrok:DrawGroupDev2(container)
   local ebButtonRefreshGob = AceGUI:Create("Button")
   ebButtonRefreshGob:SetText("Actualiser")
   ebButtonRefreshGob:SetWidth(200)
-  ebButtonRefreshGob:SetCallback("OnClick", function() refreshTableGobs() ebDeleteGob:SetList(DropdownGobs) ebSwap1Gob:SetList(DropdownGobs) ebSwap2Gob:SetList(DropdownGobs)end)
+  ebButtonRefreshGob:SetCallback("OnClick", function() refreshTableGobs() ebDeleteGob:SetList(DropdownGobs) ebSwap1Gob:SetList(DropdownGobs) ebSwap2Gob:SetList(DropdownGobs) ebIndexGob:SetList(DropdownGobs) end)
   brikabrokDevScroll:AddChild(ebButtonRefreshGob)
 end
+
 function table.val_to_str ( v )
   if "string" == type( v ) then
     v = string.gsub( v, "\n", "\\n" )
@@ -488,6 +514,38 @@ end
 
 function Brikabrok:DrawGroupDev3(container)
 
+
+    local DropdownAnims = {}
+    function Brikabrok:buildTableAnims()
+      for i=1,#Brikabrok.db.profile.anim do
+        if not Brikabrok.db.profile.anim[i] then
+            return false
+        else
+          local animName = Brikabrok.db.profile.anim[i][2]
+          local animIcon = Brikabrok.db.profile.anim[i][4]
+          if animIcon == nil then
+            animIcon = "Interface\\Icons\\trade_engineering"
+          end
+          DropdownAnims[i] = "|T"..animIcon..":16|t "..animName
+        end
+      end
+    end
+
+    local function refreshTableAnims()
+      DropdownAnims = {}
+      Brikabrok:buildTableAnims()
+    end
+
+    local function tableSwap(table,firstValue,secondValue)
+      local contentValue1 = table[firstValue]
+      local contentValue2 = table[secondValue]
+      table[firstValue] = contentValue2
+      table[secondValue] = contentValue1
+    end
+
+
+    Brikabrok:buildTableAnims()
+
     local ebContentAnim = AceGUI:Create("EditBox")
     ebContentAnim:SetText("ID de l'animkit")
     ebContentAnim:SetPoint("CENTER")
@@ -500,23 +558,23 @@ function Brikabrok:DrawGroupDev3(container)
     ebNameAnim:SetLabel("Nom de l'animation")
     brikabrokDevScroll:AddChild(ebNameAnim)
 	
-	bkbICONAnim = AceGUI:Create("EditBox")
+	  bkbICONAnim = AceGUI:Create("EditBox")
     bkbICONAnim:SetText("Interface\\Icons\\trade_engineering")
     bkbICONAnim:SetPoint("CENTER")
     bkbICONAnim:SetLabel("Icône de l'anim")
     brikabrokDevScroll:AddChild(bkbICONAnim)
 	
-	bkbAnimICON = AceGUI:Create("Icon")
+	  bkbAnimICON = AceGUI:Create("Icon")
     bkbAnimICON:SetImage("Interface\\Icons\\trade_engineering")
-	bkbAnimICON:SetImageSize(16,16)
+	  bkbAnimICON:SetImageSize(16,16)
     bkbAnimICON:SetPoint("CENTER")
     bkbAnimICON:SetLabel("Icône de l'anim")
-	local callbacks = {
-		OnClick = function (container, event, group)
-			Brikabrok:ShowBrowserFrame("anims")
-		end
-	}
-	Brikabrok:addCallbacks(bkbAnimICON, callbacks)
+	  local callbacks = {
+		  OnClick = function (container, event, group)
+			 Brikabrok:ShowBrowserFrame("anims")
+		  end
+	  }
+	  Brikabrok:addCallbacks(bkbAnimICON, callbacks)
     brikabrokDevScroll:AddChild(bkbAnimICON)
 
     local animDataType = {
@@ -524,12 +582,24 @@ function Brikabrok:DrawGroupDev3(container)
         other = "Anim",
     } 
 
+
   local ebTypeAnim = AceGUI:Create("Dropdown")
   ebTypeAnim:SetList(animDataType)
   ebTypeAnim:SetText("Type")
   ebTypeAnim:SetLabel("Type")
   brikabrokDevScroll:AddChild(ebTypeAnim)
   ebTypeAnim:SetCallback("OnValueChanged", function(self,callback,key) keyDev3Drop = key if keyDev3Drop==other then keyDev3Drop="nil" end end)
+
+  local addIndexAnim = AceGUI:Create("CheckBox")
+  addIndexAnim:SetLabel("Ajouter après une autre anim")
+  brikabrokDevScroll:AddChild(addIndexAnim)
+
+  local ebIndexAnim = AceGUI:Create("Dropdown")
+  ebIndexAnim:SetList(DropdownAnims)
+  ebIndexAnim:SetText("Choissisez une anim")
+  ebIndexAnim:SetLabel("Insérer après")
+  brikabrokDevScroll:AddChild(ebIndexAnim)
+  ebIndexAnim:SetCallback("OnValueChanged", function(self,callback,key) insertKeyAnim = key end)
 
   local ebResultAnim = AceGUI:Create("MultiLineEditBox")
   ebResultAnim:SetText("Résultat")
@@ -541,45 +611,17 @@ function Brikabrok:DrawGroupDev3(container)
   ebButtonAnim:SetText("Build")
   ebButtonAnim:SetWidth(200)
   ebButtonAnim:SetCallback("OnClick", function() 
-    if keyDev3Drop then
+    if keyDev3Drop and addIndexAnim:GetValue() == false then
       ebResultAnim:SetText('{"'..ebContentAnim:GetText()..'","'..ebNameAnim:GetText()..'","'..keyDev3Drop..'"}') 
       table.insert(Brikabrok.db.profile.anim,{ebContentAnim:GetText(),ebNameAnim:GetText(),keyDev3Drop,bkbICONAnim:GetText()}) 
+    elseif keyDev3Drop and addIndexAnim:GetValue() == true then
+      ebResultAnim:SetText('{"'..ebContentAnim:GetText()..'","'..ebNameAnim:GetText()..'","'..keyDev3Drop..'"}') 
+      table.insert(Brikabrok.db.profile.anim,insertKeyAnim+1,{ebContentAnim:GetText(),ebNameAnim:GetText(),keyDev3Drop,bkbICONAnim:GetText()})      
     else
       Brikabrok.formatMessage("Veuillez sélectionner le type des données.","WARNING")
     end
   end)
   brikabrokDevScroll:AddChild(ebButtonAnim)
-
-  local DropdownAnims = {}
-  function Brikabrok:buildTableAnims()
-    for i=1,#Brikabrok.db.profile.anim do
-      if not Brikabrok.db.profile.anim[i] then
-          return false
-      else
-        local animName = Brikabrok.db.profile.anim[i][2]
-        local animIcon = Brikabrok.db.profile.anim[i][4]
-        if animIcon == nil then
-          animIcon = "Interface\\Icons\\trade_engineering"
-        end
-        DropdownAnims[i] = "|T"..animIcon..":16|t "..animName
-      end
-    end
-  end
-
-  local function refreshTableAnims()
-    DropdownAnims = {}
-    Brikabrok:buildTableAnims()
-  end
-
-  local function tableSwap(table,firstValue,secondValue)
-    local contentValue1 = table[firstValue]
-    local contentValue2 = table[secondValue]
-    table[firstValue] = contentValue2
-    table[secondValue] = contentValue1
-  end
-
-
-  Brikabrok:buildTableAnims()
 
   local remAnimHeading = AceGUI:Create("Heading")
   remAnimHeading:SetText("Supprimer des animations")
@@ -666,7 +708,7 @@ function Brikabrok:DrawGroupDev3(container)
   local ebButtonRefreshAnim = AceGUI:Create("Button")
   ebButtonRefreshAnim:SetText("Actualiser")
   ebButtonRefreshAnim:SetWidth(200)
-  ebButtonRefreshAnim:SetCallback("OnClick", function() refreshTableAnims() ebDeleteAnim:SetList(DropdownAnims) ebSwap1Anim:SetList(DropdownAnims)  ebSwap2Anim:SetList(DropdownAnims)end)
+  ebButtonRefreshAnim:SetCallback("OnClick", function() refreshTableAnims() ebDeleteAnim:SetList(DropdownAnims) ebSwap1Anim:SetList(DropdownAnims)  ebSwap2Anim:SetList(DropdownAnims) ebIndexAnim:SetList(DropdownAnims) end)
   brikabrokDevScroll:AddChild(ebButtonRefreshAnim)
 
 end
