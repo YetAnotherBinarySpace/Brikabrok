@@ -35,7 +35,7 @@ local AceGUI = LibStub("AceGUI-3.0")
 
 
 function BrikabrokBubble:OnEnable()
-    --[[
+
     for i = 1, NUM_CHAT_WINDOWS do
         local chatOpened = _G["ChatFrame"..i.."EditBox"] -- Hook global chat frames
         if chatOpened then
@@ -46,13 +46,12 @@ function BrikabrokBubble:OnEnable()
                         if channel == "GUILD" or channel == "PARTY" or channel == "RAID" or channel == "WHISPER" or channel == "RAID_LEADER" or channel == "PARTY_LEADER" then
                             --print("meme")
                         else
-                            SendChatMessage(".cast 211565")
+                            SendChatMessage(".selfaura 140812")
                         end
                 else
-                    SendChatMessage(".unaura 211565")
+                    SendChatMessage(".selfunaura 140812")
                 end
             end)
         end
     end
-    --]]
 end
