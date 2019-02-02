@@ -4,37 +4,50 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Button', 3;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 local SquareButtonCoords = {
-	["UP"] = {     0.45312500,    0.64062500,     0.01562500,     0.20312500};
-	["DOWN"] = {   0.45312500,    0.64062500,     0.20312500,     0.01562500};
-	["LEFT"] = {   0.23437500,    0.42187500,     0.01562500,     0.20312500};
-	["RIGHT"] = {  0.42187500,    0.23437500,     0.01562500,     0.20312500};
-	["DELETE"] = { 0.01562500,    0.20312500,     0.01562500,     0.20312500};
+	UP = {     0.45312500,    0.64062500,     0.01562500,     0.20312500};
+	DOWN = {   0.45312500,    0.64062500,     0.20312500,     0.01562500};
+	LEFT = {   0.23437500,    0.42187500,     0.01562500,     0.20312500};
+	RIGHT = {  0.42187500,    0.23437500,     0.01562500,     0.20312500};
+	DELETE = { 0.01562500,    0.20312500,     0.01562500,     0.20312500};
 };
 
 function StdUi:SquareButton(parent, width, height, icon)
+	local this = self;
 	local button = CreateFrame('Button', nil, parent);
 	self:InitWidget(button);
 	self:SetObjSize(button, width, height);
 
 	self:ApplyBackdrop(button);
+	self:HookDisabledBackdrop(button);
+	self:HookHoverBorder(button);
 
-	button.icon = self:Texture(button, 12, 12, [[Interface\Buttons\SquareButtonTextures]]);
-	button.icon:SetPoint('CENTER', 0, 0);
+	function button:SetIconDisabled(texture, width, height)
+		button.iconDisabled = this:Texture(button, width, height, texture);
+		button.iconDisabled:SetDesaturated(true);
+		button.iconDisabled:SetPoint('CENTER', 0, 0);
 
-	button.iconDisabled = self:Texture(button, 16, 16, [[Interface\Buttons\SquareButtonTextures]]);
-	button.iconDisabled:SetDesaturated(true);
-	button.iconDisabled:SetPoint('CENTER', 0, 0);
+		button:SetDisabledTexture(button.iconDisabled);
+	end
 
-	local hTex = self:HighlightButtonTexture(button);
-	button:SetHighlightTexture(hTex);
-	button.highlightTexture = hTex;
+	function button:SetIcon(texture, width, height, alsoDisabled)
+		button.icon = this:Texture(button, width, height, texture);
+		button.icon:SetPoint('CENTER', 0, 0);
 
-	button:SetNormalTexture(button.icon);
-	button:SetDisabledTexture(button.iconDisabled);
+		button:SetNormalTexture(button.icon);
+
+		if alsoDisabled then
+			button:SetIconDisabled(texture, width, height);
+		end
+	end
+
 
 	local coords = SquareButtonCoords[icon];
 	if coords then
+		button:SetIcon([[Interface\Buttons\SquareButtonTextures]], 16, 16, true);
 		button.icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 		button.iconDisabled:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
 	end
@@ -66,13 +79,14 @@ end
 
 --- Creates a button with only a highlight
 --- @return Button
-function StdUi:HighlightButton(parent, width, height, text)
-	local button = CreateFrame('Button', nil, parent);
+function StdUi:HighlightButton(parent, width, height, text, inherit)
+	local button = CreateFrame('Button', nil, parent, inherit);
 	self:InitWidget(button);
 	self:SetObjSize(button, width, height);
 	button.text = self:ButtonLabel(button, text);
 
 	local hTex = self:HighlightButtonTexture(button);
+	hTex:SetBlendMode('ADD');
 
 	button:SetHighlightTexture(hTex);
 	button.highlightTexture = hTex;
@@ -81,15 +95,20 @@ function StdUi:HighlightButton(parent, width, height, text)
 end
 
 --- @return Button
-function StdUi:Button(parent, width, height, text)
-	local button = self:HighlightButton(parent, width, height, text)
+function StdUi:Button(parent, width, height, text, inherit)
+	local button = self:HighlightButton(parent, width, height, text, inherit)
+	button:SetHighlightTexture(nil);
 
 	self:ApplyBackdrop(button);
 	self:HookDisabledBackdrop(button);
+	self:HookHoverBorder(button);
+
 	return button;
 end
 
 function StdUi:ButtonAutoWidth(button, padding)
 	padding = padding or 5;
-	button:SetWidth(button.text:GetWidth() + padding * 2);
+	button:SetWidth(button.text:GetStringWidth() + padding * 2);
 end
+
+StdUi:RegisterModule(module, version);

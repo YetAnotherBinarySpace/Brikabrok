@@ -84,6 +84,7 @@ function Brikabrok:ShowHelp()
     commandFormat("/bkbconvert lien","Converti le lien d'un sort en id")
     commandFormat("/bkbpreview","Permet de prévisualiser les gobs")
     commandFormat("/in ","Permet de délayer une action du chat.")
+	commandFormat("/bkbglances ","Permet de vous donner des coups d'oeils comme sur TRP2.")
 end
 
 

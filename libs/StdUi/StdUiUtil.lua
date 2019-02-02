@@ -3,6 +3,10 @@ local StdUi = LibStub and LibStub('StdUi', true);
 if not StdUi then
 	return;
 end
+
+local module, version = 'Util', 3;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 --- @param frame Frame
 function StdUi:MarkAsValid(frame, valid)
 	if not valid then
@@ -162,3 +166,32 @@ StdUi.Util.tableCount = function(tab)
 
 	return n;
 end
+
+StdUi.Util.tableMerge = function(default, new)
+	local result = {};
+	for k, v in pairs(default) do
+		if type(v) == 'table' then
+			if new[k] then
+				result[k] = StdUi.Util.tableMerge(v, new[k]);
+			else
+				result[k] = v;
+			end
+		else
+			result[k] = new[k] or default[k];
+		end
+	end
+
+	for k, v in pairs(new) do
+		if not result[k] then
+			result[k] = v;
+		end
+	end
+
+	return result;
+end
+
+StdUi.Util.stringSplit = function(separator, input, limit)
+	return {strsplit(separator, input, limit)};
+end
+
+StdUi:RegisterModule(module, version);

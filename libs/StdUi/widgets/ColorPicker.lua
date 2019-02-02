@@ -4,7 +4,11 @@ if not StdUi or StdUi.ColorPickerFrame then
 	return ;
 end
 
-function StdUi:ColorPicker(parent)
+local module, version = 'ColorPicker', 1;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
+--- alphaSliderTexture = [[Interface\AddOns\YourAddon\Libs\StdUi\media\Checkers.tga]]
+function StdUi:ColorPicker(parent, alphaSliderTexture)
 	local wheelWidth = 128;
 	local thumbWidth = 10;
 	local barWidth = 16;
@@ -41,8 +45,7 @@ function StdUi:ColorPicker(parent)
 	self:SetObjSize(cpf.alphaSlider, barWidth, wheelWidth + thumbWidth); -- hack
 	self:GlueRight(cpf.alphaSlider, cpf.valueTexture, 10, 0);
 
-	cpf.alphaTexture = self:Texture(cpf.alphaSlider, nil, nil,
-			[[Interface\AddOns\AuctionFaster\Libs\StdUi\media\Checkers.tga]]);
+	cpf.alphaTexture = self:Texture(cpf.alphaSlider, nil, nil, alphaSliderTexture);
 	self:GlueAcross(cpf.alphaTexture, cpf.alphaSlider, 0, -thumbWidth / 2, 0, thumbWidth / 2); -- hack
 	--cpf.alphaTexture:SetColorTexture(1, 1, 1, 1);
 	--cpf.alphaTexture:SetGradientAlpha('VERTICAL', 0, 0, 0, 1, 1, 1, 1, 1);
@@ -152,7 +155,7 @@ function StdUi:ColorPicker(parent)
 		self.alphaTexture:SetGradientAlpha('VERTICAL', 1, 1, 1, 0, r, g, b, 1);
 	end);
 
-	local function onValueChanged()
+	local function OnValueChanged()
 		local r = tonumber(cpf.rEdit:GetValue() or 255) / 255;
 		local g = tonumber(cpf.gEdit:GetValue() or 255) / 255;
 		local b = tonumber(cpf.bEdit:GetValue() or 255) / 255;
@@ -165,19 +168,22 @@ function StdUi:ColorPicker(parent)
 	end
 
 
-	cpf.rEdit.OnValueChanged = onValueChanged;
-	cpf.gEdit.OnValueChanged = onValueChanged;
-	cpf.bEdit.OnValueChanged = onValueChanged;
-	cpf.aEdit.OnValueChanged = onValueChanged;
+	cpf.rEdit.OnValueChanged = OnValueChanged;
+	cpf.gEdit.OnValueChanged = OnValueChanged;
+	cpf.bEdit.OnValueChanged = OnValueChanged;
+	cpf.aEdit.OnValueChanged = OnValueChanged;
 
 	return cpf;
 end
 
 -- placeholder
-local colorPickerFrame;
-function StdUi:ColorPickerFrame(r, g, b, a, okCallback, cancelCallback)
+StdUi.colorPickerFrame = nil;
+function StdUi:ColorPickerFrame(r, g, b, a, okCallback, cancelCallback, alphaSliderTexture)
+	local colorPickerFrame = self.colorPickerFrame;
 	if not colorPickerFrame then
-		colorPickerFrame = self:ColorPicker(UIParent);
+		colorPickerFrame = self:ColorPicker(UIParent, alphaSliderTexture);
+		colorPickerFrame:SetFrameStrata('FULLSCREEN_DIALOG');
+		self.colorPickerFrame = colorPickerFrame;
 	end
 
 	colorPickerFrame.okButton:SetScript('OnClick', function (self)
@@ -202,13 +208,22 @@ function StdUi:ColorPickerFrame(r, g, b, a, okCallback, cancelCallback)
 	colorPickerFrame:Show();
 end
 
-function StdUi:ColorInput(parent, label, color)
+function StdUi:ColorInput(parent, label, width, height, r, g, b, a)
 	local this = self;
-	local button = self:Button(parent, 24, 24);
-	button:SetHighlightTexture(nil);
-	button.color = {};
 
-	self:AddLabel(parent, button, label, 'RIGHT');
+	local button = CreateFrame('Button', nil, parent);
+	button:EnableMouse(true);
+	self:SetObjSize(button, width, height or 20);
+	self:InitWidget(button);
+
+	button.target = self:Panel(button, 16, 16);
+	button.target:SetPoint('LEFT', 0, 0);
+
+	button.text = self:Label(button, label);
+	button.text:SetPoint('LEFT', button.target, 'RIGHT', 5, 0);
+	button.text:SetPoint('RIGHT', button, 'RIGHT', -5, 0);
+
+	button.color = {};
 
 	function button:SetColor(r, g, b, a)
 		if type(r) == 'table' then
@@ -224,7 +239,10 @@ function StdUi:ColorInput(parent, label, color)
 			};
 		end
 
-		self:SetBackdropColor(r, g, b, a);
+		self.target:SetBackdropColor(r, g, b, a);
+		if self.OnValueChanged then
+			self:OnValueChanged(r, g, b, a);
+		end
 	end
 
 	function button:GetColor(type)
@@ -249,5 +267,11 @@ function StdUi:ColorInput(parent, label, color)
 		);
 	end);
 
+	if r then
+		button:SetColor(r, g, b, a);
+	end
+
 	return button;
 end
+
+StdUi:RegisterModule(module, version);

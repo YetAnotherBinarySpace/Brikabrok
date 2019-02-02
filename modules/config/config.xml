@@ -34,5 +34,6 @@
 	
 	<Script file="config.lua"/>
     <Script file="gui.lua"/>
+	<Script file="clin.lua"/>
     <Script file="dev.lua"/>
 </Ui>

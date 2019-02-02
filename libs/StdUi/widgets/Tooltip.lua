@@ -4,10 +4,14 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Tooltip', 1;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 StdUi.tooltips = {}
 StdUi.frameTooltips = {}
 
 --- Standard blizzard tooltip
+---@return GameTooltip
 function StdUi:Tooltip(owner, text, tooltipName, anchor, automatic)
 	--- @type GameTooltip
 	local tip;
@@ -17,14 +21,17 @@ function StdUi:Tooltip(owner, text, tooltipName, anchor, automatic)
 		tip = self.tooltips[tooltipName];
 	else
 		tip = CreateFrame('GameTooltip', tooltipName, UIParent, 'GameTooltipTemplate');
-		tip:SetOwner(owner or UIParent, anchor or 'ANCHOR_NONE');
+
 		self:ApplyBackdrop(tip, 'panel');
 	end
 
+	tip.owner = owner;
+	tip.anchor = anchor;
+
 	if automatic then
-		owner:SetScript('OnEnter', function ()
-			tip:SetOwner(owner);
-			tip:SetPoint(anchor);
+		owner:HookScript('OnEnter', function (self)
+			tip:SetOwner(owner or UIParent, anchor or 'ANCHOR_NONE');
+
 			if type(text) == 'string' then
 				tip:SetText(text,
 					this.config.font.color.r,
@@ -37,8 +44,10 @@ function StdUi:Tooltip(owner, text, tooltipName, anchor, automatic)
 			end
 
 			tip:Show();
+			tip:ClearAllPoints();
+			this:GlueOpposite(tip, tip.owner, 0, 0, tip.anchor);
 		end);
-		owner:SetScript('OnLeave', function ()
+		owner:HookScript('OnLeave', function ()
 			tip:Hide();
 		end);
 	end
@@ -55,8 +64,6 @@ function StdUi:FrameTooltip(owner, text, tooltipName, anchor, automatic)
 		tip = self.frameTooltips[tooltipName];
 	else
 		tip = self:Panel(UIParent, 10, 10);
-		tip.owner = owner;
-		tip.anchor = anchor;
 		tip:SetFrameStrata('TOOLTIP');
 		self:ApplyBackdrop(tip, 'panel');
 
@@ -97,9 +104,13 @@ function StdUi:FrameTooltip(owner, text, tooltipName, anchor, automatic)
 
 		hooksecurefunc(tip, 'Show', function(self)
 			self:RecalculateSize();
+			self:ClearAllPoints();
 			this:GlueOpposite(self, self.owner, 0, 0, self.anchor);
 		end);
 	end
+
+	tip.owner = owner;
+	tip.anchor = anchor;
 
 	if type(text) == 'string' then
 		tip:SetText(text);
@@ -108,13 +119,15 @@ function StdUi:FrameTooltip(owner, text, tooltipName, anchor, automatic)
 	end
 
 	if automatic then
-		owner:SetScript('OnEnter', function ()
+		owner:HookScript('OnEnter', function ()
 			tip:Show();
 		end);
-		owner:SetScript('OnLeave', function ()
+		owner:HookScript('OnLeave', function ()
 			tip:Hide();
 		end);
 	end
 
 	return tip;
 end
+
+StdUi:RegisterModule(module, version);

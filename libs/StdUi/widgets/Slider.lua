@@ -4,6 +4,9 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Slider', 1;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 function StdUi:SliderButton(parent, width, height, direction)
 	local button = self:Button(parent, width, height);
 
@@ -27,10 +30,10 @@ function StdUi:StyleScrollBar(scrollBar)
 	scrollBar.background = StdUi:Panel(scrollBar);
 	scrollBar.background:SetFrameLevel(scrollBar:GetFrameLevel() - 1);
 	scrollBar.background:SetWidth(scrollBar:GetWidth());
-	StdUi:GlueAcross(scrollBar.background, scrollBar, 0, 1, 0, -1);
+	self:GlueAcross(scrollBar.background, scrollBar, 0, 1, 0, -1);
 
-	StdUi:StripTextures(buttonUp);
-	StdUi:StripTextures(buttonDown);
+	self:StripTextures(buttonUp);
+	self:StripTextures(buttonDown);
 
 	self:ApplyBackdrop(buttonUp, 'button');
 	self:ApplyBackdrop(buttonDown, 'button');
@@ -61,11 +64,11 @@ function StdUi:StyleScrollBar(scrollBar)
 	local thumbSize = scrollBar:GetWidth();
 	scrollBar:GetThumbTexture():SetWidth(thumbSize);
 
-	StdUi:StripTextures(scrollBar);
+	self:StripTextures(scrollBar);
 
-	scrollBar.thumb = StdUi:Panel(scrollBar);
+	scrollBar.thumb = self:Panel(scrollBar);
 	scrollBar.thumb:SetAllPoints(scrollBar:GetThumbTexture());
-	StdUi:ApplyBackdrop(scrollBar.thumb, 'button');
+	self:ApplyBackdrop(scrollBar.thumb, 'button');
 end
 
 function StdUi:Slider(parent, width, height, value, vertical, min, max)
@@ -88,9 +91,9 @@ function StdUi:Slider(parent, width, height, value, vertical, min, max)
 	);
 	slider:SetThumbTexture(slider.ThumbTexture);
 
-	slider.thumb = StdUi:Frame(slider);
+	slider.thumb = self:Frame(slider);
 	slider.thumb:SetAllPoints(slider:GetThumbTexture());
-	StdUi:ApplyBackdrop(slider.thumb, 'button');
+	self:ApplyBackdrop(slider.thumb, 'button');
 
 	if vertical then
 		slider:SetOrientation('VERTICAL');
@@ -105,6 +108,12 @@ function StdUi:Slider(parent, width, height, value, vertical, min, max)
 	slider:SetMinMaxValues(min or 0, max or 100);
 	slider:SetValue(value or min or 0);
 
+	slider:HookScript('OnValueChanged', function(s, ...)
+		if s.OnValueChanged then
+			s.OnValueChanged(s, ...);
+		end
+	end);
+
 	return slider;
 end
 
@@ -113,8 +122,8 @@ function StdUi:ScrollBar(parent, width, height, horizontal)
 	local panel = self:Panel(parent, width, height);
 	local scrollBar = self:Slider(parent, width, height, 0, not horizontal);
 
-	scrollBar.ScrollDownButton = StdUi:SliderButton(parent, width, 16, 'DOWN');
-	scrollBar.ScrollUpButton = StdUi:SliderButton(parent, width, 16, 'UP');
+	scrollBar.ScrollDownButton = self:SliderButton(parent, width, 16, 'DOWN');
+	scrollBar.ScrollUpButton = self:SliderButton(parent, width, 16, 'UP');
 	scrollBar.panel = panel;
 
 	scrollBar.ScrollUpButton.scrollBar = scrollBar;
@@ -147,3 +156,5 @@ function StdUi:ScrollBar(parent, width, height, horizontal)
 
 	return scrollBar, panel;
 end
+
+StdUi:RegisterModule(module, version);

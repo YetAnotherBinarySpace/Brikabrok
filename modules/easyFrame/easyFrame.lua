@@ -34,6 +34,8 @@ local Brikabrok = LibStub("AceAddon-3.0"):GetAddon("Brikabrok")
 BrikabrokSECONDARY = Brikabrok:NewModule("SECONDARY", "AceEvent-3.0","AceComm-3.0")
 local AceGUI = LibStub("AceGUI-3.0")
 
+Brikabrok.plyCoordX, Brikabrok.plyCoordY, Brikabrok.plyCoordZ = 0,0,0
+
 
 function BrikabrokSECONDARY:OnEnable()
 
@@ -547,26 +549,26 @@ local function DrawGroupSecondary3(container)
 
 
   function Brikabrok.GetCoordsPlayer(self,event,msg,...)
-    if Brikabrok:IsVisibleEasyFrame() then
       if strfind(msg,"Orientation:") and strfind(msg,"X:") then
         local playerCoords = msg:gsub('%s+', '')
         playerCoords = playerCoords:gsub('X:', '')
         playerCoords = playerCoords:gsub('Y', '')
         playerCoords = playerCoords:gsub('Z', '')
         playerCoords = playerCoords:gsub('Orientation', '')
-          Brikabrok.plyCoordX,Brikabrok.plyCoordY,Brikabrok.plyCoordZ,Brikabrok.plyOrientation = strsplit(":",playerCoords)
-          local degrees = tostring(math.deg(Brikabrok.plyOrientation))
-          local shortDegrees = degrees:sub(1,5)
-          xCurrentPos:SetText("X: "..Brikabrok.plyCoordX)
-          yCurrentPos:SetText("Y: "..Brikabrok.plyCoordY) 
-          zCurrentPos:SetText("Z: "..Brikabrok.plyCoordZ)
-          oCurrentPos:SetText("Orientation: "..Brikabrok.plyOrientation.." radian(s) soit "..shortDegrees.." degré(s)")
+        Brikabrok.plyCoordX,Brikabrok.plyCoordY,Brikabrok.plyCoordZ,Brikabrok.plyOrientation = strsplit(":",playerCoords)
+		  if Brikabrok:IsVisibleEasyFrame() then
+			  local degrees = tostring(math.deg(Brikabrok.plyOrientation))
+			  local shortDegrees = degrees:sub(1,5)
+			  xCurrentPos:SetText("X: "..Brikabrok.plyCoordX)
+			  yCurrentPos:SetText("Y: "..Brikabrok.plyCoordY) 
+			  zCurrentPos:SetText("Z: "..Brikabrok.plyCoordZ)
+			  oCurrentPos:SetText("Orientation: "..Brikabrok.plyOrientation.." radian(s) soit "..shortDegrees.." degré(s)")
+		  end
       elseif strfind(msg,"Map:") then
         for map in string.gmatch(msg, "Map: (%d+) %(%)") do
             Brikabrok.currentMap = map
         end
       end
-    end
     return false,msg,...
   end
 

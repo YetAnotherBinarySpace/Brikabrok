@@ -37,4 +37,5 @@
 	<Include file="macros\macros.xml"/>
     <Include file="trinitylinks\links.xml"/>
     <Include file="bubbleWrite\bubbleWrite.xml"/>
+	<Include file="gobSave\gobSave.xml"/>
 </Ui>

@@ -4,10 +4,13 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Table', 1;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 --- Draws table in a panel according to data, example:
 --- local columns = {
----		{header = 'Name', dataIndex = 'name', width = 20, align = 'RIGHT'},
----		{header = 'Price', dataIndex = 'price', width = 60},
+---		{header = 'Name', index = 'name', width = 20, align = 'RIGHT'},
+---		{header = 'Price', index = 'price', width = 60},
 --- };
 --- local data {
 ---		{name = 'Item one', price = 12.22},
@@ -16,6 +19,7 @@ end
 --- }
 ---
 function StdUi:Table(parent, width, height, rowHeight, columns, data)
+  	local this = self;
 	local panel = self:Panel(parent, width, height);
 	panel.rowHeight = rowHeight;
 
@@ -47,7 +51,7 @@ function StdUi:Table(parent, width, height, rowHeight, columns, data)
 			if col.header and strlen(col.header) > 0 then
 				if not self.headers[i] then
 					self.headers[i] = {
-						text = StdUi:FontString(self, ''),
+						text = this:FontString(self, ''),
 					};
 				end
 
@@ -61,10 +65,10 @@ function StdUi:Table(parent, width, height, rowHeight, columns, data)
 					column.text:SetJustifyH(col.align);
 				end
 
-				StdUi:GlueTop(column.text, self, marginLeft, 0, 'LEFT');
+				this:GlueTop(column.text, self, marginLeft, 0, 'LEFT');
 				marginLeft = marginLeft + col.width;
 
-				column.dataIndex = col.dataIndex
+				column.index = col.index
 				column.width = col.width
 			end
 		end
@@ -89,13 +93,13 @@ function StdUi:Table(parent, width, height, rowHeight, columns, data)
 
 				if not self.rows[y][x] then
 					self.rows[y][x] = {
-						text = StdUi:FontString(self, '');
+						text = this:FontString(self, '');
 					};
 				end
 
 				local cell = self.rows[y][x];
 
-				cell.text:SetText(row[col.dataIndex]);
+				cell.text:SetText(row[col.index]);
 				cell.text:SetWidth(col.width);
 				cell.text:SetHeight(rowHeight);
 				cell.text:ClearAllPoints();
@@ -103,7 +107,7 @@ function StdUi:Table(parent, width, height, rowHeight, columns, data)
 					cell.text:SetJustifyH(col.align);
 				end
 
-				StdUi:GlueTop(cell.text, self, marginLeft, marginTop, 'LEFT');
+				this:GlueTop(cell.text, self, marginLeft, marginTop, 'LEFT');
 				marginLeft = marginLeft + col.width;
 			end
 
@@ -122,3 +126,5 @@ function StdUi:Table(parent, width, height, rowHeight, columns, data)
 
 	return panel;
 end
+
+StdUi:RegisterModule(module, version);

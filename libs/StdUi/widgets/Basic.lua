@@ -4,6 +4,9 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Basic', 2;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 function StdUi:Frame(parent, width, height, inherits)
 	local frame = CreateFrame('Frame', nil, parent, inherits);
 	self:InitWidget(frame);
@@ -22,7 +25,7 @@ end
 function StdUi:PanelWithLabel(parent, width, height, inherits, text)
 	local frame = self:Panel(parent, width, height, inherits);
 
-	frame.label = self:Label(frame, text);
+	frame.label = self:Header(frame, text);
 	frame.label:SetAllPoints();
 	frame.label:SetJustifyH('MIDDLE');
 
@@ -36,8 +39,7 @@ function StdUi:PanelWithTitle(parent, width, height, text)
 	frame.titlePanel:SetPoint('TOP', 0, -10);
 	frame.titlePanel:SetPoint('LEFT', 30, 0);
 	frame.titlePanel:SetPoint('RIGHT', -30, 0);
-
-	frame.titlePanel.label:SetFont(self.config.font.familly, self.config.font.titleSize, self.config.font.effect);
+	frame.titlePanel:SetBackdrop(nil);
 
 	return frame;
 end
@@ -66,3 +68,5 @@ function StdUi:ArrowTexture(parent, direction)
 
 	return texture;
 end
+
+StdUi:RegisterModule(module, version);

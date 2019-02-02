@@ -4,13 +4,16 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Window', 4;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 --- @return Frame
 function StdUi:Window(parent, title, width, height)
 	parent = parent or UIParent;
 	local frame = self:PanelWithTitle(parent, width, height, title);
+	frame:SetClampedToScreen(true);
 	frame.titlePanel.isWidget = false;
 	self:MakeDraggable(frame); -- , frame.titlePanel
-	self:LayoutConfig(frame, 20);
 
 	local closeBtn = self:Button(frame, 16, 16, 'X');
 	closeBtn.text:SetFontSize(12);
@@ -22,6 +25,10 @@ function StdUi:Window(parent, title, width, height)
 	end);
 
 	frame.closeBtn = closeBtn;
+
+	function frame:SetWindowTitle(title)
+		self.titlePanel.label:SetText(title);
+	end
 
 	return frame;
 end
@@ -42,7 +49,7 @@ function StdUi:Dialog(title, message, dialogId)
 	if window.messageLabel then
 		window.messageLabel:SetText(message);
 	else
-		window.messageLabel = self:Label(window, message, self.config.font.size);
+		window.messageLabel = self:Label(window, message);
 		window.messageLabel:SetJustifyH('MIDDLE');
 		self:GlueAcross(window.messageLabel, window, 5, -10, -5, 5);
 	end
@@ -93,7 +100,7 @@ function StdUi:Confirm(title, message, buttons, dialogId)
 				btn:SetScript('OnClick', btnDefinition.onClick);
 			end
 
-			tinsert(window.buttons, btn);
+			window.buttons[k] = btn;
 			i = i + 1;
 		end
 
@@ -103,3 +110,5 @@ function StdUi:Confirm(title, message, buttons, dialogId)
 
 	return window;
 end
+
+StdUi:RegisterModule(module, version);

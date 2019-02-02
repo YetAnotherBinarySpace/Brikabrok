@@ -4,6 +4,9 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'Scroll', 2;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 StdUi.ScrollBarEvents = {
 	UpButtonOnClick = function(self)
 		local scrollBar = self.scrollBar;
@@ -247,6 +250,8 @@ function StdUi:ScrollFrame(parent, width, height, scrollChild)
 	scrollFrame:SetClampedToScreen(true);
 	scrollFrame:SetClipsChildren(true);
 
+	scrollChild:SetPoint('RIGHT', scrollFrame, 'RIGHT', 0, 0);
+
 	scrollFrame.scrollChild = scrollChild;
 
 	panel.scrollFrame = scrollFrame;
@@ -258,9 +263,9 @@ end
 
 --- Works pretty much the same as scroll frame however it does not have smooth scroll and only display a certain amount
 --- of items
-function StdUi:FauxScrollFrame(parent, width, height, displayCount, lineHeight)
+function StdUi:FauxScrollFrame(parent, width, height, displayCount, lineHeight, scrollChild)
 	local this = self;
-	local panel, scrollFrame, scrollChild, scrollBar = self:ScrollFrame(parent, width, height);
+	local panel, scrollFrame, scrollChild, scrollBar = self:ScrollFrame(parent, width, height, scrollChild);
 
 	scrollFrame.lineHeight = lineHeight;
 	scrollFrame.displayCount = displayCount;
@@ -282,3 +287,5 @@ function StdUi:FauxScrollFrame(parent, width, height, displayCount, lineHeight)
 
 	return panel, scrollFrame, scrollChild, scrollBar;
 end
+
+StdUi:RegisterModule(module, version);

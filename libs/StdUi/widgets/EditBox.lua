@@ -4,14 +4,18 @@ if not StdUi then
 	return;
 end
 
+local module, version = 'EditBox', 3;
+if not StdUi:UpgradeNeeded(module, version) then return end;
+
 --- @return EditBox
 function StdUi:SimpleEditBox(parent, width, height, text)
 	local this = self;
+	--- @type EditBox
 	local editBox = CreateFrame('EditBox', nil, parent);
 	self:InitWidget(editBox);
 
 	editBox:SetTextInsets(3, 3, 3, 3);
-	editBox:SetFont(self.config.font.familly, self.config.font.size, self.config.font.effect);
+	editBox:SetFontObject(ChatFontNormal);
 	editBox:SetAutoFocus(false);
 
 	editBox:SetScript('OnEscapePressed', function (self)
@@ -19,7 +23,7 @@ function StdUi:SimpleEditBox(parent, width, height, text)
 	end);
 
 	function editBox:SetFontSize(newSize)
-		self:SetFont(this.config.font.familly, newSize, this.config.font.effect);
+		self:SetFont(self:GetFont(), newSize, this.config.font.effect);
 	end
 
 	if text then
@@ -27,6 +31,7 @@ function StdUi:SimpleEditBox(parent, width, height, text)
 	end
 
 	self:HookDisabledBackdrop(editBox);
+	self:HookHoverBorder(editBox);
 	self:ApplyBackdrop(editBox);
 	self:SetObjSize(editBox, width, height);
 
@@ -37,15 +42,10 @@ function StdUi:SearchEditBox(parent, width, height, placeholderText)
 	local editBox = self:SimpleEditBox(parent, width, height, '');
 
 	local icon = self:Texture(editBox, 14, 14, [[Interface\Common\UI-Searchbox-Icon]]);
-	icon:SetVertexColor(
-		self.config.font.colorDisabled.r,
-		self.config.font.colorDisabled.g,
-		self.config.font.colorDisabled.b,
-		self.config.font.colorDisabled.a
-	);
+	local c = self.config.font.color.disabled;
+	icon:SetVertexColor(c.r, c.g, c.b, c.a);
 	local label = self:Label(editBox, placeholderText);
-	label:SetFont(self.config.font.familly, self.config.font.size, 'NONE');
-	StdUi:SetTextColor(label, 'colorDisabled');
+	self:SetTextColor(label, 'disabled');
 
 	self:GlueLeft(icon, editBox, 5, 0, true);
 	self:GlueRight(label, icon, 2, 0);
@@ -62,6 +62,10 @@ function StdUi:SearchEditBox(parent, width, height, placeholderText)
 		else
 			self.placeholder.icon:Show();
 			self.placeholder.label:Show();
+		end
+
+		if self.OnValueChanged then
+			self:OnValueChanged(self:GetText());
 		end
 	end);
 
@@ -99,7 +103,7 @@ function StdUi:EditBox(parent, width, height, text, validator)
 			end
 
 			if self.OnValueChanged and tostring(self.lastValue) ~= tostring(self.value) then
-				self:OnValueChanged();
+				self:OnValueChanged(self.value);
 				self.lastValue = self.value;
 			end
 		end
@@ -180,25 +184,35 @@ end
 function StdUi:MultiLineBox(parent, width, height, text)
 	local editBox = CreateFrame('EditBox');
 	local panel, scrollFrame = self:ScrollFrame(parent, width, height, editBox);
+
+	scrollFrame.target = panel;
+	editBox.target = panel;
+
 	self:ApplyBackdrop(panel, 'button');
+	self:HookHoverBorder(scrollFrame);
+	self:HookHoverBorder(editBox);
 
 	editBox:SetWidth(scrollFrame:GetWidth());
 	--editBox:SetHeight(scrollFrame:GetHeight());
 
 	editBox:SetTextInsets(3, 3, 3, 3);
-	editBox:SetFont(self.config.font.familly, self.config.font.size, self.config.font.effect);
+	editBox:SetFontObject(ChatFontNormal);
 	editBox:SetAutoFocus(false);
 	editBox:SetScript('OnEscapePressed', editBox.ClearFocus);
 	editBox:SetMultiLine(true);
 	editBox:EnableMouse(true);
 	editBox:SetAutoFocus(false);
 	editBox:SetCountInvisibleLetters(false);
-	--editBox:SetAllPoints();
+	editBox:SetAllPoints();
 
 	editBox.scrollFrame = scrollFrame;
 	editBox.panel = panel;
 
-	editBox:SetScript('OnCursorChanged', function (self, _, y, _, cursorHeight)
+	if text then
+		editBox:SetText(text);
+	end
+
+	editBox:SetScript('OnCursorChanged', function(self, _, y, _, cursorHeight)
 		local sf, y = self.scrollFrame, -y;
 		local offset = sf:GetVerticalScroll();
 
@@ -212,13 +226,22 @@ function StdUi:MultiLineBox(parent, width, height, text)
 		end
 	end)
 
+	editBox:SetScript('OnTextChanged', function(self)
+		if self.OnValueChanged then
+			self:OnValueChanged(self:GetText());
+		end
+	end);
+
+	scrollFrame:HookScript('OnMouseDown', function(sf, button)
+		sf.scrollChild:SetFocus();
+	end);
+
 	scrollFrame:HookScript('OnVerticalScroll', function(self, offset)
 		self.scrollChild:SetHitRectInsets(0, 0, offset, self.scrollChild:GetHeight() - offset - self:GetHeight());
 	end);
 
-	if text then
-		editBox:SetText(text);
-	end
 
 	return editBox;
 end
+
+StdUi:RegisterModule(module, version);

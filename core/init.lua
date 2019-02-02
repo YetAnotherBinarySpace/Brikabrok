@@ -50,8 +50,8 @@ local acd = LibStub("AceConfigDialog-3.0")
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.06"
-Brikabrok.version = "Brikabrok~1.06"
+Brikabrok.versionmode ="1.08"
+Brikabrok.version = "Brikabrok~1.08"
 
 local defaults = {
   profile = {
@@ -214,6 +214,8 @@ function Brikabrok:OnInitialize()
     self:EnableModule("MACRO")
     self:EnableModule("TRINITYLINKS")
     self:EnableModule("BUBBLE")
+	--self:EnableModule("GOBSAVE")
+	-- soon^tm
 
     -- nasty loop to create base for users and AVOID overwrite existing DB
     if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
@@ -267,6 +269,7 @@ function Brikabrok:OnInitialize()
     self:RegisterChatCommand("bkb","ShowHelp")
     self:RegisterChatCommand("in","commandIN")
     self:RegisterChatCommand("bkbin","commandIN")
+	self:RegisterChatCommand("bkbglances","commandGlances")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
     if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
         C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
