@@ -33,9 +33,9 @@
     <Include file="config\config.xml"/>
     <Include file="mainFrame\mainFrame.xml"/>
     <Include file="easyFrame\easyFrame.xml"/>
-    <Include file="minimap\minimap.xml"/>
 	<Include file="macros\macros.xml"/>
     <Include file="trinitylinks\links.xml"/>
     <Include file="bubbleWrite\bubbleWrite.xml"/>
 	<Include file="gobSave\gobSave.xml"/>
+	<Include file="minimap\minimap.xml"/>
 </Ui>

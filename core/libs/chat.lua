@@ -85,6 +85,8 @@ function Brikabrok:ShowHelp()
     commandFormat("/bkbpreview","Permet de prévisualiser les gobs")
     commandFormat("/in ","Permet de délayer une action du chat.")
 	commandFormat("/bkbglances ","Permet de vous donner des coups d'oeils comme sur TRP2.")
+	commandFormat("/bkbviewer ","Permet de chercher et de prévisualiser des gobs")
+  commandFormat("/bkbsave ","Permet de sauvegarder et de replacer des groupes de gobs.")
 end
 
 
@@ -100,6 +102,10 @@ function Brikabrok:ConvertID(input)
     else
         Brikabrok.formatMessage("Veuillez entrer un lien de spell valide en faisant shift+click sur un spell dans votre grimoire.","WARNING")
     end
+end
+
+function Brikabrok:CommandViewer(input)
+    Brikabrok.ShowGobBrowserFrame();
 end
 
 -- Ripped code from /slashin Addon, all credits to @funkydude for this implementation

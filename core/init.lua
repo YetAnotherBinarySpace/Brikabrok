@@ -42,6 +42,7 @@ local AceDB = LibStub("AceDB-3.0")
 local aboutPanel = LibStub("LibAboutPanel", true)
 local ac = LibStub("AceConfig-3.0")
 local acd = LibStub("AceConfigDialog-3.0")
+local StdUi = LibStub('StdUi');
 
 -----------------------------------
 ----------- Variables -------------
@@ -50,8 +51,8 @@ local acd = LibStub("AceConfigDialog-3.0")
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.08"
-Brikabrok.version = "Brikabrok~1.08"
+Brikabrok.versionmode ="1.09"
+Brikabrok.version = "Brikabrok~1.09"
 
 local defaults = {
   profile = {
@@ -65,11 +66,16 @@ local defaults = {
         macro = {
             storage = "Character",
         },
+		modules = {
+            activated = BrikabrokModulesDefault,
+        },
         dynamic_links = {
             active = true,
+			color = "cffffff00",
         },
         everything = {
             autoclose = false,
+            autofetch = false,
         },
         chat = {
             bubble = true,
@@ -138,6 +144,57 @@ local function MacroConfig()
     }
 end
 
+local function ModulesConfig()
+    return {
+        name = "Modules à charger",
+        type = "group",
+        order = 1,
+        args = {
+            macro_storage = {
+                name = "Modules optionnels",
+                desc = "Choississez quels modules seront chargés.",
+                type = "multiselect",
+                order = 2,
+                values = BrikabrokModules,
+                set = function(_, key, value) Brikabrok.db.profile.modules.activated[key] = value  Brikabrok.formatMessage("Merci de faire un /reload pour rechargez les modules", "INFO") end,
+                get = function(_, key) return Brikabrok.db.profile.modules.activated[key] end
+            },
+        }
+    }
+end
+
+local function rgbToHex(rgb)
+   local hexadecimal = 'cff'
+   
+   for key = 1, #rgb do
+      local value = rgb[key] 
+      local hex = ''
+      
+      while(value > 0)do
+         local index = math.fmod(value, 16) + 1
+         value = math.floor(value / 16)
+         hex = string.sub('0123456789ABCDEF', index, index) .. hex            
+      end
+      
+      if(string.len(hex) == 0)then
+         hex = '00'
+      elseif(string.len(hex) == 1)then
+         hex = '0' .. hex
+      end
+      hexadecimal = hexadecimal .. hex
+   end
+   
+   return hexadecimal:lower()
+end
+
+local function ColorPicker()
+	StdUi:ColorPickerFrame(1, 1, 1, 1, function(colorSelect)
+		  local r,g,b= colorSelect:GetColorRGBA();
+		  local hex = rgbToHex({r*255,g*255,b*255});
+		  Brikabrok.db.profile.dynamic_links.color = hex;
+	end);
+end
+
 local function LinksConfig()
     return {
         name = "Liens dynamiques",
@@ -153,6 +210,15 @@ local function LinksConfig()
                 set = function(info,val) Brikabrok.db.profile.dynamic_links.active = val end,
                 get = function() return Brikabrok.db.profile.dynamic_links.active end
             },
+			color_picker = {
+                name = "Couleur des liens",
+                desc = "Changer la couleur des boutons dans le chat",
+                type = "execute",
+				func = function() ColorPicker() end,
+                order = 2,
+            },
+			
+			
         }
     }
 end
@@ -172,6 +238,15 @@ local function EverythingConfig()
                 width = "full",
                 set = function(info,val) Brikabrok.db.profile.everything.autoclose = val end,
                 get = function() return Brikabrok.db.profile.everything.autoclose end
+            },
+            autofetch_id = {
+                name = "Récupération automatique des IDs",
+                desc = "Permet de récupérer automatiquement l'ID pour la fonctionnalité rotate quand un gob est spawn",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.everything.autofetch = val end,
+                get = function() return Brikabrok.db.profile.everything.autofetch end
             },
         }
     }
@@ -210,12 +285,27 @@ function Brikabrok:OnInitialize()
     self:EnableModule("CONFIG")
     self:EnableModule("UI")
     self:EnableModule("SECONDARY")
-    self:EnableModule("MINIMAP")
     self:EnableModule("MACRO")
     self:EnableModule("TRINITYLINKS")
+    self:EnableModule("GOBSAVE")
     self:EnableModule("BUBBLE")
-	--self:EnableModule("GOBSAVE")
-	-- soon^tm
+	for k,v in pairs(Brikabrok.db.profile.modules.activated) do
+		if v then
+			self:EnableModule(k)
+        else
+            self:DisableModule(k)
+        end
+	end
+	
+	for k,v in pairs(BrikabrokModulesDisable) do
+		if Brikabrok.db.profile.modules.activated[k] then
+			for i=1,#v do
+				self:DisableModule(v[i])
+			end
+		end
+	end
+
+	self:EnableModule("MINIMAP")
 
     -- nasty loop to create base for users and AVOID overwrite existing DB
     if self.db.profile.spells == nil and self.db.profile.gobs == nil and self.db.profile.anim == nil then
@@ -256,6 +346,8 @@ function Brikabrok:OnInitialize()
     acd:AddToBlizOptions("Brikabrok ".."Divers", "Divers", "Brikabrok")
     ac:RegisterOptionsTable("Brikabrok ".."Bulle",BubbleConfig())
     acd:AddToBlizOptions("Brikabrok ".."Bulle", "Bulle", "Brikabrok")
+	ac:RegisterOptionsTable("Brikabrok ".."Modules",ModulesConfig())
+    acd:AddToBlizOptions("Brikabrok ".."Modules", "Modules", "Brikabrok")
     self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
     self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
@@ -264,12 +356,13 @@ function Brikabrok:OnInitialize()
     self:RegisterEvent("CHAT_MSG_CHANNEL")
     self:RegisterChatCommand("bkbdev", "ShowDevFrame")
     self:RegisterChatCommand("bkbconvert","ConvertID")
-    self:RegisterChatCommand("bkbpreview", "callPreview")
     self:RegisterChatCommand("brikabrok","ShowHelp")
     self:RegisterChatCommand("bkb","ShowHelp")
     self:RegisterChatCommand("in","commandIN")
     self:RegisterChatCommand("bkbin","commandIN")
 	self:RegisterChatCommand("bkbglances","commandGlances")
+	self:RegisterChatCommand("bkbviewer","CommandViewer")
+    self:RegisterChatCommand("bkbsave","commandSAVE")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
     if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
         C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)

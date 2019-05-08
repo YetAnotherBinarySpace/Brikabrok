@@ -54,6 +54,17 @@ BrikabrokChecks = {
 -----------------------------------
 
 
+BrikabrokModulesDisable = {
+}
+
+BrikabrokModules = {
+}
+
+BrikabrokModulesDefault = {
+}
+
+
+-- to:do // update these
 raceRPscale = {
     {"Dwarf", 137.16, 134.62},
     {"Draenei", 220.98, 213.36},

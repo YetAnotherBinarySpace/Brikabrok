@@ -40,16 +40,18 @@ function BrikabrokBubble:OnEnable()
         local chatOpened = _G["ChatFrame"..i.."EditBox"] -- Hook global chat frames
         if chatOpened then
             self:HookScript(chatOpened,"OnTextChanged", function(self)
-                local input = chatOpened:GetText()
-                if Brikabrok.db.profile.chat.bubble and input:len() > 0 and Brikabrok:correctInput(input,".") and Brikabrok:correctInput(input,"/") then
-                        local channel = chatOpened:GetAttribute("chatType")
-                        if channel == "GUILD" or channel == "PARTY" or channel == "RAID" or channel == "WHISPER" or channel == "RAID_LEADER" or channel == "PARTY_LEADER" then
-                            --print("meme")
-                        else
-                            SendChatMessage(".selfaura 140812")
-                        end
-                else
-                    SendChatMessage(".selfunaura 140812")
+                if Brikabrok.db.profile.chat.bubble then
+                    local input = chatOpened:GetText()
+                    if input:len() > 0 and Brikabrok:correctInput(input,".") and Brikabrok:correctInput(input,"/") then
+                            local channel = chatOpened:GetAttribute("chatType")
+                            if channel == "GUILD" or channel == "PARTY" or channel == "RAID" or channel == "WHISPER" or channel == "RAID_LEADER" or channel == "PARTY_LEADER" then
+                                --print("meme")
+                            else
+                                SendChatMessage(".selfaura 140812")
+                            end
+                    else
+                        SendChatMessage(".selfunaura 140812")
+                    end
                 end
             end)
         end
