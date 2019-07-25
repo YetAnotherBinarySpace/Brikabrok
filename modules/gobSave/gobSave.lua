@@ -83,7 +83,7 @@ function BrikabrokGOBSAVE:OnEnable()
 	   if ((name ~= nil) and (#coordinates == 4)) then
 		--Brikabrok.RefreshData();
 		--Brikabrok.RefreshData();
-		if Brikabrok.currentId ~= nil and name:find("GroundZ") == nil and name:find("Orientation") == nil  and Brikabrok.gobBWindow ~= nil then
+		if Brikabrok.currentId ~= nil and name:find("GroundZ") == nil and name:find("Orientation") == nil and Brikabrok.gobBWindow ~= nil then
 			local id = Brikabrok.generateID();
 			local pos = vec3(coordinates[1],coordinates[2],coordinates[3]);
 			local gobInfo = {};
@@ -156,6 +156,9 @@ function BrikabrokGOBSAVE:OnEnable()
 		local function getGobsList(filter)
 		   -- No filter or bad filter
 		   local fullTable = {}
+		   if Brikabrok.db.profile.savedGobs == nil then
+		   	Brikabrok.db.profile.savedGobs = {}
+		   end
 		   if filter == nil or filter:len() == 0 then     
 		      for _, gob in pairs(Brikabrok.db.profile.savedGobs) do
 		         tinsert(fullTable, { name = gob["sname"], real = gob}) 
@@ -173,33 +176,33 @@ function BrikabrokGOBSAVE:OnEnable()
 		end
 
 
-		local window = StdUi:Window(UIParent, 'Brikabrok Wayback Machine', 700, 500);
-		window:SetPoint('CENTER');
+		Brikabrok.gobBWindow = StdUi:Window(UIParent, 'Brikabrok Wayback Machine', 700, 500);
+		Brikabrok.gobBWindow:SetPoint('CENTER');
 
-		local searchBox = StdUi:SearchEditBox(window, 400, 30, 'Écrivez le mot clé ici');
+		local searchBox = StdUi:SearchEditBox(Brikabrok.gobBWindow, 400, 30, 'Écrivez le mot clé ici');
 		searchBox:SetFontSize(16);
 		searchBox:SetScript('OnEnterPressed', function()
 		      local input = searchBox:GetText()
 		      buildTable = getGobsList(input)
-		      window.searchResults:SetData(buildTable, true);
+		      Brikabrok.gobBWindow.searchResults:SetData(buildTable, true);
 		end);
-		StdUi:GlueTop(searchBox, window, 20, -50, 'LEFT');
+		StdUi:GlueTop(searchBox, Brikabrok.gobBWindow, 20, -50, 'LEFT');
 
 
-		local searchButton = StdUi:Button(window, 80, 30, 'Chercher');
+		local searchButton = StdUi:Button(Brikabrok.gobBWindow, 80, 30, 'Chercher');
 		searchButton:SetScript("OnClick", function()
 		      local input = searchBox:GetText()
 		      buildTable = getGobsList(input)
-		      window.searchResults:SetData(buildTable, true);
+		      Brikabrok.gobBWindow.searchResults:SetData(buildTable, true);
 		end)
 		StdUi:GlueRight(searchButton, searchBox, 5, 0);
 
-		local fs = StdUi:FontString(window, 'Nom');
-		StdUi:GlueTop(fs, window, 0, -30);
+		local fs = StdUi:FontString(Brikabrok.gobBWindow, 'Nom');
+		StdUi:GlueTop(fs, Brikabrok.gobBWindow, 0, -30);
 		Brikabrok.BMWL = fs;
 
 
-		local addFavoritesButton = StdUi:Button(window, 30, 30, '');
+		local addFavoritesButton = StdUi:Button(Brikabrok.gobBWindow, 30, 30, '');
 		addFavoritesButton.texture = StdUi:Texture(addFavoritesButton, 17, 17, [[Interface\Common\ReputationStar]]);
 		addFavoritesButton.texture:SetPoint('CENTER');
 		addFavoritesButton.texture:SetBlendMode('ADD');
@@ -250,31 +253,33 @@ function BrikabrokGOBSAVE:OnEnable()
 		   },
 		}
 
-		window.searchResults = StdUi:ScrollTable(window, cols, 8, 40);
-		window.searchResults:EnableSelection(true);
-		StdUi:GlueBelow(window.searchResults, searchBox, 0, - 40, 'LEFT') ;
+		Brikabrok.gobBWindow.searchResults = StdUi:ScrollTable(Brikabrok.gobBWindow, cols, 8, 40);
+		Brikabrok.gobBWindow.searchResults:EnableSelection(true);
+		StdUi:GlueBelow(Brikabrok.gobBWindow.searchResults, searchBox, 0, - 40, 'LEFT') ;
 
 
-		local selectionButton = StdUi:Button(window, 100, 30, 'Spawn');
+		local selectionButton = StdUi:Button(Brikabrok.gobBWindow, 100, 30, 'Spawn');
 		selectionButton:SetScript("OnClick", function()
 		end)
-		StdUi:GlueBelow(selectionButton, window.searchResults, 0, -10, 'CENTER') ;
+		StdUi:GlueBelow(selectionButton, Brikabrok.gobBWindow.searchResults, 0, -10, 'CENTER') ;
 
-		local radius = StdUi:NumericBox(window, 150, 24, 15);
+		local radius = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 15);
 		radius:SetMaxValue(100);
 		radius:SetMinValue(1);
-		StdUi:GlueTop(radius, window, -180, -135, 'RIGHT');
+		StdUi:GlueTop(radius, Brikabrok.gobBWindow, -180, -135, 'RIGHT');
 
-		Brikabrok.saveName = StdUi:EditBox(window, 150, 24, "Sauvegarde X");
+		Brikabrok.saveName = StdUi:EditBox(Brikabrok.gobBWindow, 150, 24, "Sauvegarde X");
 		StdUi:GlueBelow(Brikabrok.saveName, radius, 0, -10);
 
 
-		local label = StdUi:AddLabel(window, radius, 'Rayon', 'TOP');
+		local label = StdUi:AddLabel(Brikabrok.gobBWindow, radius, 'Rayon', 'TOP');
 
-		local button = StdUi:Button(window, 100, 20, 'Récupérer');
+		local button = StdUi:Button(Brikabrok.gobBWindow, 100, 20, 'Récupérer');
 		StdUi:GlueBelow(button, radius, 20, -40, 'LEFT');
 		button:SetScript("OnClick", function() 
-		      --Brikabrok.db.profile.savedGobs = {}
+		      if Brikabrok.db.profile.savedGobs == nil then
+		      	Brikabrok.db.profile.savedGobs = {}
+		      end
 		      Brikabrok.nearestGob = {} 
 		      Brikabrok.formatMessage("Récupération de la liste de gobs ...")
 		      SendChatMessage(".gob near "..radius:GetText()); 
@@ -282,28 +287,28 @@ function BrikabrokGOBSAVE:OnEnable()
 		end)
 
 
-		Brikabrok.gobOrientation = StdUi:NumericBox(window, 150, 24, 0);
+		Brikabrok.gobOrientation = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
 		Brikabrok.gobOrientation:SetMaxValue(360);
 		Brikabrok.gobOrientation:SetMinValue(0);
 		StdUi:GlueBelow(Brikabrok.gobOrientation, radius, 0, -95);
-		local label = StdUi:AddLabel(window, Brikabrok.gobOrientation, "Modificaton d'orientation", 'TOP');
+		local label = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobOrientation, "Modificaton d'orientation", 'TOP');
 		-- Label
-		local xL = StdUi:FontString(window, 'X: ');
-		StdUi:GlueTop(xL, window, -150, -135, 'RIGHT');
-		local yL = StdUi:FontString(window, 'Y:');
+		local xL = StdUi:FontString(Brikabrok.gobBWindow, 'X: ');
+		StdUi:GlueTop(xL, Brikabrok.gobBWindow, -150, -135, 'RIGHT');
+		local yL = StdUi:FontString(Brikabrok.gobBWindow, 'Y:');
 		StdUi:GlueBelow(yL, xL, 0, -10);
-		local zL = StdUi:FontString(window, 'Z:');
+		local zL = StdUi:FontString(Brikabrok.gobBWindow, 'Z:');
 		StdUi:GlueBelow(zL, yL, 0, -10);
 
 		-- Actual coordinates
-		local x = StdUi:FontString(window, '0');
+		local x = StdUi:FontString(Brikabrok.gobBWindow, '0');
 		StdUi:GlueRight(x, xL, 0, 0);
-		local y = StdUi:FontString(window, '0');
+		local y = StdUi:FontString(Brikabrok.gobBWindow, '0');
 		StdUi:GlueRight(y, yL, 0, 0);
-		local z = StdUi:FontString(window, '0');
+		local z = StdUi:FontString(Brikabrok.gobBWindow, '0');
 		StdUi:GlueRight(z, zL, 0, 0);
 
-		local gps = StdUi:Button(window, 100, 20, 'GPS');
+		local gps = StdUi:Button(Brikabrok.gobBWindow, 100, 20, 'GPS');
 		StdUi:GlueBelow(gps, zL, 15, -10, 'LEFT');
 		gps:SetScript("OnClick", function() 
 		      Brikabrok.RefreshData()
@@ -312,8 +317,8 @@ function BrikabrokGOBSAVE:OnEnable()
 		      z:SetText(Brikabrok.Origin.z)
 		end)
 
-		allSaves = getGobsList("");
-		window.searchResults:SetData(allSaves, true);
+		local allSaves = getGobsList("");
+		Brikabrok.gobBWindow.searchResults:SetData(allSaves, true);
 	end
 
 

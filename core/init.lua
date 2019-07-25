@@ -64,6 +64,7 @@ local defaults = {
             data = true,
         },
         macro = {
+			unlocker = false,
             storage = "Character",
         },
 		modules = {
@@ -71,7 +72,7 @@ local defaults = {
         },
         dynamic_links = {
             active = true,
-			color = "cffffff00",
+			color = "cffffffe0",
         },
         everything = {
             autoclose = false,
@@ -140,6 +141,16 @@ local function MacroConfig()
                 set = function(info,val) Brikabrok.db.profile.macro.storage = val end,
                 get = function() return Brikabrok.db.profile.macro.storage end
             },
+			macro_unlocker = {
+                name = "Macro Unlocker",
+                desc = "Permet d'avoir jusqu'à 1080 macros par personnage (nécessite le Wow.exe modifié)",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.macro.unlocker = val end,
+                get = function() return Brikabrok.db.profile.macro.unlocker end,
+            },			
+			
         }
     }
 end
@@ -364,6 +375,9 @@ function Brikabrok:OnInitialize()
 	self:RegisterChatCommand("bkbviewer","CommandViewer")
     self:RegisterChatCommand("bkbsave","commandSAVE")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
+	if Brikabrok.db.profile.macro.unlocker then
+		C_Timer.After(5.25, function () MAX_CHARACTER_MACROS = 1080 end) -- kinda hacky but the easiest way
+	end
     if Brikabrok.db.profile.dynamic_links.active and IsAddOnLoaded("TrinityAdmin") then
         C_Timer.After(5.5, function () Brikabrok.formatMessage("Vous avez TrinityAdmin d'activé ainsi que l'option 'Liens', ce qui peut causer un conflit, veuillez désactiver l'un des deux.","WARNING") end)
     end
