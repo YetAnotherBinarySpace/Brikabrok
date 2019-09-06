@@ -98,21 +98,21 @@ end
 function Brikabrok:CreateMacro(name,icon,content)
   local numglobal,numperchar = GetNumMacros()
   if Brikabrok.db.profile.macro.storage == "Account" then
-    if numglobal < 120 then
+    if numglobal < MAX_ACCOUNT_MACROS then
       CreateMacro(name, icon, content)
       Brikabrok.formatMessage("Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
     else
-      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'empalacement de sauvegarde dans les options.","DANGER")
+      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'emplacement de sauvegarde dans les options.","DANGER")
     end
   elseif Brikabrok.db.profile.macro.storage == "Character" then
-    if numperchar < 18 then
+    if numperchar < MAX_CHARACTER_MACROS then
       CreateMacro(name, icon, content,1)
       Brikabrok.formatMessage("Une macro vient d'être ajoutée, vous pouvez maintenant la mettre dans votre barre d'action .", "SUCCESS")
     else
-      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'empalacement de sauvegarde dans les options.","DANGER")
+      Brikabrok.formatMessage("Vous n'avez plus de place dans vos macros de personnage, veuillez supprimer des macros ou changer d'emplacement de sauvegarde dans les options.","DANGER")
     end
   else
-    Brikabrok.formatMessage("Le type de stockage défini est invalide, veuillez aller le redéfinir dans les options","DANGER")
+    Brikabrok.formatMessage("Le type de stockage défini est invalide, veuillez le redéfinir dans les options","DANGER")
   end
 end
 

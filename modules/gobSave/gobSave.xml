@@ -34,4 +34,5 @@
 	<Script file="maf.lua"/>
 	<Script file="gobSave.lua"/>
 	<Script file="gobBrowser.lua"/>
+    <Script file="patchBrowser.lua"/>
 </Ui>

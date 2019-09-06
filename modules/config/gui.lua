@@ -20087,7 +20087,7 @@ local iconList = {
 local pairs, tinsert = pairs, tinsert;
 local iconListSize = #iconList;
 local iconPrefix = "Interface\\Icons\\"
-
+Brikabrok.IocnsList = iconList;
 function Brikabrok.getIconList(filter)
 	-- No filter or bad filter
 	if filter == nil or filter:len() == 0 then

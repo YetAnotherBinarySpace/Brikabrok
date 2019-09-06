@@ -84,9 +84,11 @@ function Brikabrok:ShowHelp()
     commandFormat("/bkbconvert lien","Converti le lien d'un sort en id")
     commandFormat("/bkbpreview","Permet de prévisualiser les gobs")
     commandFormat("/in ","Permet de délayer une action du chat.")
-	commandFormat("/bkbglances ","Permet de vous donner des coups d'oeils comme sur TRP2.")
-	commandFormat("/bkbviewer ","Permet de chercher et de prévisualiser des gobs")
-  commandFormat("/bkbsave ","Permet de sauvegarder et de replacer des groupes de gobs.")
+	  commandFormat("/bkbglances ","Permet de vous donner des coups d'oeils comme sur TRP2.")
+	  commandFormat("/bkbviewer ","Permet de chercher et de prévisualiser des gobs")
+    commandFormat("/bkbsave ","Permet de sauvegarder et de replacer des groupes de gobs.")
+	  commandFormat("/bkbmacro ","Ouvre la fenêtre des macros du Brikabrok")
+    commandFormat("/bkbtitanforged ","Permet de prévisualiser les objets du patch TitanForged.")
 end
 
 

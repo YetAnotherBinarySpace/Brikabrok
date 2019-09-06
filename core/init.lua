@@ -374,6 +374,8 @@ function Brikabrok:OnInitialize()
 	self:RegisterChatCommand("bkbglances","commandGlances")
 	self:RegisterChatCommand("bkbviewer","CommandViewer")
     self:RegisterChatCommand("bkbsave","commandSAVE")
+	self:RegisterChatCommand("bkbmacro","ShowMacroFrame")
+    self:RegisterChatCommand("bkbtitanforged", "ShowPatchBrowserFrame")
     C_Timer.After(5, function () Brikabrok.formatMessage("Chargé, utilisez /bkbdev pour créer vos propres listes ou cliquer sur l'îcone de la minimap.") end)
 	if Brikabrok.db.profile.macro.unlocker then
 		C_Timer.After(5.25, function () MAX_CHARACTER_MACROS = 1080 end) -- kinda hacky but the easiest way

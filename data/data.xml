@@ -36,4 +36,6 @@
 	<Script file="gobs.lua"/>
 	<Script file="spells.lua"/>
     <Script file="goblist.lua"/>
+	<Script file="macros.lua"/>
+	<Script file="forge.lua"/>
 </Ui>
