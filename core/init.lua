@@ -51,8 +51,8 @@ local StdUi = LibStub('StdUi');
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.09"
-Brikabrok.version = "Brikabrok~1.09"
+Brikabrok.versionmode ="1.10"
+Brikabrok.version = "Brikabrok~1.10"
 
 local defaults = {
   profile = {
@@ -80,6 +80,7 @@ local defaults = {
         },
         chat = {
             bubble = true,
+            fix = false,
         }
   },
 }
@@ -277,6 +278,15 @@ local function BubbleConfig()
                 width = "full",
                 set = function(info,val) Brikabrok.db.profile.chat.bubble = val end,
                 get = function() return Brikabrok.db.profile.chat.bubble end
+            },
+            bubble_fix = {
+                name = "Fix",
+                desc = "Force le client à enlever la bulle dans tous les cas",
+                type = "toggle",
+                order = 1,
+                width = "full",
+                set = function(info,val) Brikabrok.db.profile.chat.fix = val end,
+                get = function() return Brikabrok.db.profile.chat.fix end
             },
         }
     }

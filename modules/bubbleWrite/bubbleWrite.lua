@@ -54,6 +54,11 @@ function BrikabrokBubble:OnEnable()
                     end
                 end
             end)
+             self:HookScript(chatOpened,"OnEnterPressed", function(self)
+                if Brikabrok.db.profile.chat.fix then
+                    SendChatMessage(".selfunaura 140812")
+                end
+            end)
         end
     end
 end
