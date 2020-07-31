@@ -65,7 +65,7 @@ function BrikabrokGOBSAVE:OnEnable()
 			playerCoords = playerCoords:gsub('Y', '')
 			playerCoords = playerCoords:gsub('Z', '')
 			playerCoords = playerCoords:gsub('Orientation', '')
-			Brikabrok.Origin.x,Brikabrok.Origin.y,Brikabrok.Origin.z = strsplit(":",playerCoords)
+			Brikabrok.Origin.x,Brikabrok.Origin.y,Brikabrok.Origin.z, Brikabrok.PlayerOrientation = strsplit(":",playerCoords)
 		end
 	   
 
@@ -80,7 +80,7 @@ function BrikabrokGOBSAVE:OnEnable()
 		   end  
 		end
 
-	   if ((name ~= nil) and (#coordinates == 4)) then
+	   if ((name ~= nil) and (#coordinates == 8)) then
 		--Brikabrok.RefreshData();
 		--Brikabrok.RefreshData();
 		if Brikabrok.currentId ~= nil and name:find("GroundZ") == nil and name:find("Orientation") == nil and Brikabrok.gobBWindow ~= nil then
@@ -96,6 +96,10 @@ function BrikabrokGOBSAVE:OnEnable()
 			gobInfo["name"] = name;
 			gobInfo["pos"] = pos;
 			gobInfo["o"] = coordinates[4];
+			gobInfo["rx"] = coordinates[5];
+			gobInfo["ry"] = coordinates[6];
+			gobInfo["rz"] = coordinates[7];
+			gobInfo["scale"] = coordinates[8];
 			Brikabrok.db.profile.savedGobs[Brikabrok.currentId]["sname"] = Brikabrok.saveName:GetText()
 			Brikabrok.db.profile.savedGobs[Brikabrok.currentId][id] = gobInfo;
 		end	   
@@ -234,16 +238,31 @@ function BrikabrokGOBSAVE:OnEnable()
 		                  break;
 		               end
 		            end
-		            local refentialPos = rowData.real[minKey]["pos"];
+		            --local refentialPos = rowData.real[minKey]["pos"];
 		            for k,v in pairs(rowData.real) do
 		               if type(v) == "table" then    
 		                 
-		                  local nPX = (v["pos"].x - refentialPos.x) + Brikabrok.Origin.x;
-		                  local nPY = (v["pos"].y - refentialPos.y) + Brikabrok.Origin.y;
-		                  local nPZ = (v["pos"].z - refentialPos.z) + Brikabrok.Origin.z;
+		                  local nPX = (v["pos"].x);
+		                  local nPY = (v["pos"].y);
+		                  local nPZ = (v["pos"].z);
 		                  local eT = v["entry"];
-		                  local oR = v["o"] + math.pi + math.rad(Brikabrok.gobOrientation:GetText());
-		                  SendChatMessage(".addonhelper brikabrok gobaddxyz "..eT.." "..nPX.." "..nPY.." "..nPZ.." "..oR)
+		                  local oR = Brikabrok.gobScale:GetText();
+		                  local rotationX = v["rx"] + Brikabrok.gobOrientationX:GetText();
+		                  local rotationY = v["ry"] + Brikabrok.gobOrientationY:GetText();
+		                  local rotationZ = v["rz"] + Brikabrok.gobOrientationZ:GetText();
+		                  local scale = v["scale"];
+
+
+		                  if rotationX > 360 then
+		                  	rotationX = rotationX - 360 
+		                  elseif rotationY > 360 then
+		                    rotationY = rotationY - 360 
+		                  elseif rotationZ > 360 then
+		                	rotationZ = rotationZ - 360 
+		                  end
+
+		                  --local oR = v["o"] + math.pi + math.rad(Brikabrok.gobOrientation:GetText());
+		                  SendChatMessage(".addonhelper brikabrok gobaddxyz "..eT.." "..nPX.." "..nPY.." "..nPZ.." "..oR.. " "..rotationX.. " "..rotationY.." ".. rotationZ.. " " .. scale)
 		               end
 		            end
 		            
@@ -264,7 +283,7 @@ function BrikabrokGOBSAVE:OnEnable()
 		StdUi:GlueBelow(selectionButton, Brikabrok.gobBWindow.searchResults, 0, -10, 'CENTER') ;
 
 		local radius = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 15);
-		radius:SetMaxValue(100);
+		radius:SetMaxValue(5000);
 		radius:SetMinValue(1);
 		StdUi:GlueTop(radius, Brikabrok.gobBWindow, -180, -135, 'RIGHT');
 
@@ -287,11 +306,32 @@ function BrikabrokGOBSAVE:OnEnable()
 		end)
 
 
-		Brikabrok.gobOrientation = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
-		Brikabrok.gobOrientation:SetMaxValue(360);
-		Brikabrok.gobOrientation:SetMinValue(0);
-		StdUi:GlueBelow(Brikabrok.gobOrientation, radius, 0, -95);
-		local label = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobOrientation, "Modificaton d'orientation", 'TOP');
+		Brikabrok.gobOrientationX = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
+		Brikabrok.gobOrientationX:SetMaxValue(360);
+		Brikabrok.gobOrientationX:SetMinValue(0);
+		StdUi:GlueBelow(Brikabrok.gobOrientationX, radius, 0, -95);
+
+		Brikabrok.gobOrientationY = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
+		Brikabrok.gobOrientationY:SetMaxValue(360);
+		Brikabrok.gobOrientationY:SetMinValue(0);
+		StdUi:GlueBelow(Brikabrok.gobOrientationY, Brikabrok.gobOrientationX, 0, -20);
+
+		Brikabrok.gobOrientationZ = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
+		Brikabrok.gobOrientationZ:SetMaxValue(360);
+		Brikabrok.gobOrientationZ:SetMinValue(0);
+		StdUi:GlueBelow(Brikabrok.gobOrientationZ, Brikabrok.gobOrientationY, 0, -20);
+
+		Brikabrok.gobScale = StdUi:NumericBox(Brikabrok.gobBWindow, 150, 24, 0);
+		StdUi:GlueBelow(Brikabrok.gobScale, Brikabrok.gobOrientationZ, 0, -20);
+
+		local label = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobOrientationX, "Modificaton d'orientation X", 'TOP');
+
+		local label2 = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobOrientationY, "Modificaton d'orientation Y", 'TOP');
+
+		local label3 = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobOrientationZ, "Modificaton d'orientation Z", 'TOP');
+
+
+		local label4 = StdUi:AddLabel(Brikabrok.gobBWindow, Brikabrok.gobScale, "Modificaton de Scale", 'TOP');
 		-- Label
 		local xL = StdUi:FontString(Brikabrok.gobBWindow, 'X: ');
 		StdUi:GlueTop(xL, Brikabrok.gobBWindow, -150, -135, 'RIGHT');

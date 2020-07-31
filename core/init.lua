@@ -51,8 +51,8 @@ local StdUi = LibStub('StdUi');
 Brikabrok.name = "Brikabrok"
 Brikabrok.channel = "xtensionxtooltip2"
 Brikabrok.channelname = GetChannelName(Brikabrok.channel)
-Brikabrok.versionmode ="1.10"
-Brikabrok.version = "Brikabrok~1.10"
+Brikabrok.versionmode ="1.11"
+Brikabrok.version = "Brikabrok~1.11"
 
 local defaults = {
   profile = {

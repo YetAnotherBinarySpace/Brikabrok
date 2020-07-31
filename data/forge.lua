@@ -29,8 +29,6 @@
 
 --]]
 
-
-
 titanForgedPatchData = {
      {"Epaulieres valeera royal", 305180},
      {"Epaulieres jugement HD purple", 305194},

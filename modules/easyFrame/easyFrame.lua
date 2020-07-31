@@ -242,6 +242,18 @@ local function DrawGroupSecondary2(container)
     qsActivate:SetWidth(200)
     qsActivate:SetCallback("OnClick", function() SendChatMessage(".gob act "..qsGob:GetText(), "GUILD") end)
     brikabrokEasyScroll:AddChild(qsActivate)
+	
+    local qsDoodads = AceGUI:Create("CheckBox")
+    qsDoodads:SetLabel("Doodads")
+    brikabrokEasyScroll:AddChild(qsDoodads)
+	local boolToAct = {
+		["true"] = "on",
+		["false"] = "off",	
+	}
+	local qsDoodadsCallbacks = {
+        OnValueChanged = function (value, container, event, group) SendChatMessage(string.format(".gob doodad %s %s", qsGob:GetText(), boolToAct[tostring(qsDoodads:GetValue())]), "GUILD")  end ,
+    }
+	Brikabrok:addCallbacks(qsDoodads, qsDoodadsCallbacks)
 
     local callbacksSize = {
     OnValueChanged = function (value, container, event, group)  end ,

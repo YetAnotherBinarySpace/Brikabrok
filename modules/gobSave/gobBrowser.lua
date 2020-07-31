@@ -41,10 +41,10 @@ local StdUi = LibStub('StdUi');
 	   end
 	   filter = filter:lower();
 	   local newList = {};
-	   for _, gob in pairs(BrikabrokGobList) do
-		  if Brikabrok.safeMatch(gob:lower(), filter) and not string.find(gob, "meta") then
-			 tinsert(newList, { name = GetFileName(gob), real = gob}) 
-		  end
+	   for iFileData, gob in pairs(BrikabrokGobList) do
+	      if string.match(gob:lower(), filter) then
+	      	tinsert(newList, { name = GetFileName(gob), real = gob, fileData = iFileData});
+	      end
 	   end
 	   return newList;
 	end
@@ -104,7 +104,7 @@ local StdUi = LibStub('StdUi');
 			  format       = 'string',
 			  events         = {
 				 OnClick = function(table, cellFrame, rowFrame, rowData, columnData, rowIndex)
-					Brikabrok.BMW:SetModel(rowData.real);
+					Brikabrok.BMW:SetModel(rowData.fileData);
 					Brikabrok.BMWL:SetText(rowData.real);
 				 end,
 				 

@@ -1,8 +1,8 @@
 
-## Interface: 80000
+## Interface: 83000
 #------------- Addon ----------------------------
 ## Title: Le Brikabrok
-## Version: 1.1.0
+## Version: 1.1.1
 ## Notes: Simple, Utile, Fonctionnel : What Else ?
 ## SavedVariables: BrikabrokDB
 #------------- Author ----------------------------
